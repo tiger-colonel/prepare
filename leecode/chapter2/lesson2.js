@@ -2,7 +2,7 @@ export default (str) => {
     // 建立数据结构，堆栈，保存数据
     let r = [];
     // 给定任意子输入都返回第一个符合条件的子串
-    let matchFun  = (str) => {
+    let matchFun = (str) => {
         let j = str.match(/^(0+|1+)/)[0];
         let o = (j[0] ^ 1).toString().repeat(j.length);
         let reg = new RegExp(`^(${j}${o})`);
