@@ -5,7 +5,7 @@ class Node {
         this.next = undefined;
     }
 }
-
+ 
 // 声明链表的结构
 class NodeList {
     constructor(arr) {
@@ -19,6 +19,7 @@ class NodeList {
         return head;
     }
 }
+
 // 交换两个节点的值
 let swap = (p, q) => {
     let val = p.val;
