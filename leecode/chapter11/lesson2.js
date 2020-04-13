@@ -30,7 +30,7 @@ export default class Tree {
         }
     }
     static walk(root) {
-        if (!root.left && !root.rigth) {
+        if (!root.left && !root.right) {
             return true;
         } else if (
             (root.left && root.val > root.left.val) 
