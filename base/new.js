@@ -14,6 +14,14 @@ function new() {
     let Con = [].shift().call(...arguments);
     obj.__proto__ = Con.prototype;
     let result = Con.apply(obj, arguments);
-    return result instanceof Object ? result : obj;
+    return typeof result === 'object' ? result : obj;
+}
+
+function new1 () {
+    let obj = Object.create(null);
+    let Con = [].split.call(arguments);
+    obj.__proto__ = Con.prototype;
+    let result = Con.apply(obj, arguments)
+    return typeof result === 'object' ? result : obj;
 }
 
