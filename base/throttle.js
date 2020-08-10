@@ -1,3 +1,4 @@
+// 节流
 function throttle1(fn, delay) {
     let prev = Date.now();
     return function() {
@@ -80,4 +81,61 @@ function throttle5(fn, delay) {
         }
     }
 }
+
+// 面试版本
+// 节流
+let throttle = (fn, wait) => {
+    let timer;
+    return (...args) => {
+        if (timer) return;
+        timer = setTimeout(() => {
+            fn(...args);
+            timer = null;
+        }, wait);
+    }
+}
+// 防抖
+let debounce = (fn, wait) => {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        setTimeout(() => {
+            fn(...args);
+        }, wait);
+    }
+}
+// settimeout 实现 setInterval
+function mysetInterval(fn, time) {
+    function exec() {
+        setTimeout(() => {
+            fn();
+            exec();
+        }, time);
+    }
+    exec();
+}
+
+let timerWorker = {};
+function mysetInterval1(fn, time) {
+    let key = Symbol();
+    function exec(fn, time) {
+        timerWorker[key] = setTimeout(() => {
+            fn();
+            exec(f n, time);
+        }, time);
+    }
+    exec(fn ,time)
+}
+
+function myClearInterval(key) {
+    if (key in timerWorker) {
+        clearTimeout(timerWorker[key]);
+        delete timerWorker[key]
+    }
+}
+
+function log() {
+    console.log(1)
+}
+mysetInterval(log, 1000);
 

@@ -1,3 +1,4 @@
+// 防抖
 function debounce1(fn, wait) {
     let timer;
     return function() {
@@ -67,4 +68,15 @@ function debounce4(fn, wait, flag) {
     }
 
     return debounce;
+}
+
+// 面试版本
+function debounce(f, wait) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            f(...args)
+        }, wait);
+    }
 }
