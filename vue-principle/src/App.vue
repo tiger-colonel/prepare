@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhaocheng.zhai
  * @Date: 2020-04-20 18:47:41
- * @LastEditTime: 2020-07-24 15:21:37
+ * @LastEditTime: 2020-08-10 23:44:27
  * @LastEditors: zhaocheng.zhai
 --> 
 <template>
@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    // HelloWorld
   },
   data: () => ({
     msg: 'Learn Vue priniple',
@@ -50,9 +50,6 @@ export default {
   // },
   methods: {
     handleChangePage() {
-      this.count = 2;
-
-      this.count = 3;
       this.count = 4;
       this.msg = this.count + 1;
       this.$nextTick(() => {
