@@ -1,121 +1,62 @@
-class MyPromise {
+class Promise {
     constructor(executor) {
-        let status = 'pending';
-        let value;
-        let reason;
-        let resolvedFnArray = [];
-        let rejectFnArray = [];
-        let resolve = (value) => {
-            if (this.status === 'pending') {
-                this.status = 'fulfilled';
+        this.state = 'pending';
+        this.value = undefined;
+        this.reason = undefined;
+
+        this.onResolvedCallbacks = [];
+        this.onRejectedCallbacks = [];
+
+        let resolve = value => {
+            if (this.state === 'pending') {
+                this.state = 'fulfilled';
                 this.value = value;
-                this.resolvedFnArray.forEach(fn => fn());
+                this.onResolvedCallbacks.forEach(cb => cb())
             }
-        }
-        let reject = (reason) => {
-            if (this.status === 'pending') {
-                this.status = 'rejected';
+        };
+        let reject = reason => {
+            if (this.state === 'pending') {
+                this.state = 'rejected';
                 this.reason = reason;
-                this.rejectFnArray.forEach(fn => fn())
+                this.onRejectedCallbacks.forEach(cb => cb())
             }
         }
         try {
             executor(resolve, reject)
-        } catch (e) {
-            reject(e)
+        } catch (error) {
+            reject(error)
         }
     }
-    then(resolvedFn, rejectFn) {
-        let promise2 = new Promise((resolve, reject) => {
-            if (this.status === 'pending') {
-                this.resolvedFnArray.push(() => {
-                    let x = resolvedFn(this.value);
-                    resolvePromise(promise2, x, resolve, reject)
-                })
-                this.rejectFnArray.push(() => {
-                    let x = rejectFn(this.reason);
-                    resolvePromise(promise2, x, resolve, reject)
-                })
-            }
-            if (this.status === 'fulfilled') {
-                let x = resolvedFn(this.value);
-                resolvePromise(promise2, x, resolve, reject)
-            }
-            if (this.status === 'rejected') {
-                let x = rejectFn(this.reason)
-                resolvePromise(promise2, x, resolve, reject)
-            }
-        })
-        return promise2;
-    }
-    resolvePromise(promise2, x, resolve, reject) {
-        if (promise2 === x) {
-            return reject(new TypeError('循环引用'))
+    then(onFulfilledFn, onRejectedFn) {
+        if (this.state === 'fulfilled') {
+            onFulfilledFn(this.value)
         }
-        // 防止多次调用
-        let called;
-        if (x !== null && (typeof x === 'object' || typeof x === 'function')) {
-            try {
-                let then = x.then;
-                if (typeof then === 'function') {
-                    then.call(x, y => {
-                        if (called) return;
-                        called = true;
-                        resolvePromise(promise2, y, resolve, reject);
-                    }, err => {
-                        if (called) return;
-                        called = true;
-                        reject(err)
-                    })
-                } else {
-                    resolve(x)
-                }
-            } catch (e) {
-                if (called) return;
-                called = true;
-                reject(e)
-            }
-        } else {
-            resolve(x)
+        if (this.state === 'rejected') {
+            onRejectedFn(this.reason)
         }
-    }
-
-    all(promises) {
-        let arr = [];
-        let i = 0;
-        let len = promises.length;
-        let processData = (index, data) => {
-            arr[index] = data;
-            i += 1 ;
-            if (i === len) {
-                resolve(arr)
-            }
-        }
-        return new Promise((resolve, reject) => {
-            for (let j - 0; j < len; j++) {
-                promises[j].then((resp) => {
-                    processData(j, resp)
-                }, reject)
-            }
-        })
-        race(promises) {
-            return new Promise((resolve, reject) => {
-                for (let i = 0, len = promises.length; i < len; i ++) {
-                    promises[i].then(resolve, reject);
-                }
+        if (this.state === 'pending') {
+            this.onResolvedCallbacks.push(() => {
+                onFulfilledFn(this.value);
+            })
+            this.onRejectedCallbacks.push(() => {
+                onRejectedFn(this.reason);
             })
         }
     }
 }
 
 
-let a = new Promise((resolve, reject) => {
-    resolve(1);
-});
-a.then((res) => {
-    console.log('-----res-----', res);
-}, error => {
-    console.log('-----error-----', error);
-}).then((res1) => {
-    console.log('-----res1-----', res1);
+let fn = () => new Promise((resolve, reject) => {
+    resolve(123);
+})
+
+
+fn().then(res => {
+    console.log('-----res1-----', res);
+    return res
+}).then(res2 => {
+    console.log('-----res2-----', res2);
+    return res2
+}).then(res3 => {
+    console.log('-----3-----', res3);
 })
