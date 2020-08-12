@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 // 0811 
 // 基础版本
 function deepclone(target) {
     let cloneObj = {};
-    Object.keys(target).forEach((item) => {
+    Object.keys(target).forEach((key) => {
         cloneObj[key] = target[key]
     });
     return cloneObj;
@@ -50,6 +51,7 @@ function deepclone4(target, map = new Map()) {
             return map.get(target)
         }
         map.set(target, cloneObj);
+        // eslint-disable-next-line no-inner-declarations
         function forEach(array, cb) {
             let i = -1;
             while (++i < array.length) {

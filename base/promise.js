@@ -1,3 +1,7 @@
+function resolvePromise(promise2, x, resolve, reject) {
+
+}
+
 class Promise {
     constructor(executor) {
         this.state = 'pending';
@@ -28,20 +32,27 @@ class Promise {
         }
     }
     then(onFulfilledFn, onRejectedFn) {
-        if (this.state === 'fulfilled') {
-            onFulfilledFn(this.value)
-        }
-        if (this.state === 'rejected') {
-            onRejectedFn(this.reason)
-        }
-        if (this.state === 'pending') {
-            this.onResolvedCallbacks.push(() => {
-                onFulfilledFn(this.value);
-            })
-            this.onRejectedCallbacks.push(() => {
-                onRejectedFn(this.reason);
-            })
-        }
+        let promise2 = new Promise((resolve, reject) => {
+            if (this.state === 'fulfilled') {
+                let x = onFulfilledFn(this.value);
+                resolvePromise(promise2, x, resolve, reject);
+            }
+            if (this.state === 'rejected') {
+                let x = onRejectedFn(this.reason);
+                resolvePromise(promise2, x, resolve, reject);
+            }
+            if (this.state === 'pending') {
+                this.onResolvedCallbacks.push(() => {
+                    let x = onFulfilledFn(this.value);
+                    resolvePromise(promise2, x, resolve, reject);
+                })
+                this.onRejectedCallbacks.push(() => {
+                    let x = onRejectedFn(this.reason);
+                    resolvePromise(promise2, x, resolve, reject);
+                })
+            }
+        })
+        return promise2;
     }
 }
 
