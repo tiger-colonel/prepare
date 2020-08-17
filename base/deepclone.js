@@ -1,76 +1,59 @@
-/* eslint-disable no-unused-vars */
-// 0811 
-// 基础版本
-function deepclone(target) {
-    let cloneObj = {};
-    Object.keys(target).forEach((key) => {
-        cloneObj[key] = target[key]
-    });
-    return cloneObj;
+function isObject1(target) {
+    const type = typeof target;
+    return target !== null && (type === 'function' || type === 'object');
 }
-// 1.0版本 考虑数组
-function deepclone1(target) {
-    let isArray = [].isArray.call(target);
-    let cloneObj = isArray ? [] : {};
-    for (const key in target) {
-        cloneObj[key] = target[key]
+
+function getType1(target) {
+    return Object.prototype.toString.call(target);
+}
+
+function getInit1(target) {
+    let Ctor = target.constructor;
+    return new Ctor();
+}
+
+function forEach1(arr, cb) {
+    let i = -1;
+    while (i++ < arr.length) {
+        cb(arr[i], i)
     }
-    return cloneObj;
+    return arr;
 }
 
-// 2.0 考虑递归
-function deepclone2(target) {
-    let isArray = [].isArray.call(target);
-    let cloneObj = isArray ? [] : {};
-    for(const key in target) {
-        cloneObj[key] = typeof target[key] === 'object' ? deepclone2(target[key]) : target[key];
-    }
-    return cloneObj;
-}
-
-// 3.0 考虑循环引用
-function deepclone3(target, map = new Map()) {
-    let isArray = Array.isArray(target);
-    let cloneObj = isArray ? [] : {};
-    for (const key in target) {
-        if (map.has(target)) {
-            return map.get(target);
-        }
-        map.set(target, cloneObj);
-        cloneObj[key] = typeof target[key] === 'object' ? deepclone2(target[key]) : target[key];
-    }
-    return cloneObj;
-}
-
-// 4.0 考虑性能
-function deepclone4(target, map = new Map()) {
-    if (typeof target === 'object') {
-        let isArray = Array.isArray(target);
-        let cloneObj = isArray ? [] : {};
-        if (map.has(target)) {
-            return map.get(target)
-        }
-        map.set(target, cloneObj);
-        // eslint-disable-next-line no-inner-declarations
-        function forEach(array, cb) {
-            let i = -1;
-            while (++i < array.length) {
-                cb(i, array[i]);
-            }
-            return array;
-        }
-        let keys = isArray ? target : Object.keys(target);
-        forEach(keys, (key, value) => {
-            if (keys) {
-                key = value;
-            }
-            cloneObj[key] = deepclone4(target[key], map);
-        });
-
-        return cloneObj;
-    } else {
+function deepclone1(target, map = new Map()) {
+    if (!isObject1(target)) {
         return target;
     }
+    let depTag = ['objectTag', 'arrayTag', 'setTag', 'mapTag'];
+    let type = getType1(target);
+    let cloneObj;
+    if (depTag.includes(type)) {
+        cloneObj = getInit(target);
+    }
+    if (map.has(target)) {
+        return map.get(target)
+    }
+    map.set(target, cloneObj);
+    if (type === setTag) {
+        target.forEach(value => {
+            cloneObj.add(deepclone1(value, map));
+        })
+        return cloneObj;
+    }
+    if (type === mapTag) {
+        target.forEach((value, key) => {
+            cloneObj.set(key, deepclone1(value, map))
+        });
+        return cloneObj;
+    }
+
+    let keys = type === arrayTag ? undefined : Object.keys(target)
+    forEach1(keys, (value, key) => {
+        if (keys) {
+            key = value;
+        }
+        cloneObj[key] = deepclone1(target[key], map);
+    })
 }
 
 // 完全版
