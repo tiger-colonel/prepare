@@ -121,7 +121,7 @@ function mysetInterval1(fn, time) {
     function exec(fn, time) {
         timerWorker[key] = setTimeout(() => {
             fn();
-            exec(f n, time);
+            exec(fn, time);
         }, time);
     }
     exec(fn ,time)
