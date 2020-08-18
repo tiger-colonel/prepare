@@ -20,7 +20,7 @@ export default (str) => {
                 tmp.push(`${arr[0][i]}${arr[1][j]}`);
             }
         }
-        arr.splice(0, 2, temp);
+        arr.splice(0, 2, tmp);
 
         if (arr.length === 1) {
             return arr[0];
