@@ -82,8 +82,33 @@ function maxRange(arr) {
 }
 
 // 6. 缺失的第一个正数
-
-
+function firstPositiveNumber(arr) {
+    arr = arr.filter(num => num > 0);
+    let min;
+    let len = arr.length - 1;
+    if (len < 1) {
+        return 1;
+    }
+    for (let i = 0; i < len; i++) {
+        min = arr[i];
+        for (let j = i + 1; j < len; j++) {
+            if (min > arr[j]) {
+                [arr[j], min] = [min, arr[j]]
+            }
+        }
+        arr[i] = min;
+        if (i > 0) {
+            if (arr[i + 1] - arr[i] > 1) {
+                return arr[i - 1] + 1;
+            }
+        } else {
+            if (min !== 1) {
+                return 1;
+            }
+        }
+        return arr.pop() + 1;
+    }
+}
 
 // 7. quickSort
 function quickSort(arr) {
@@ -138,5 +163,6 @@ function inPlace(arr) {
 // let a = OddSort([4,2,5,7])
 // let a = quickSort([4,1,36,2,61,3]);
 // let a = inPlace([3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48])
-let a = maxRange([3,6,8,1,18]);
+// let a = maxRange([3,6,8,1,18]);
+let a = firstPositiveNumber([1,2,0])
 console.log(a);
