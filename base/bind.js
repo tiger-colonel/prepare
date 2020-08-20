@@ -38,4 +38,39 @@ const foo = {
 
 const bound = bar.mybind(foo, 22, 33, 44);
 // new bound(); // bar, [22, 33, 44]
-bound();
+// bound();
+
+
+
+var name = 'window'
+
+var person1 = {
+  name: 'person1',
+  show3: function () {
+    return function () {
+        debugger;
+      console.log(this.name)
+    }
+  },
+  show4: function () {
+      debugger;
+    return () => console.log(this.name)
+  }
+}
+var person2 = { name: 'person2' }
+
+person1.show3()()
+person1.show3().call(person2)
+person1.show3.call(person2)()
+
+person1.show4()()
+person1.show4().call(person2)
+person1.show4.call(person2)()
+
+function neww() {
+    let obj = {};
+    let Ctor = [].shift.call(arguments);
+    obj.__proto__ = Ctor.prototype;
+    let result = Ctor.apply(obj, arguments);
+    return typeof result === 'object' ? result : obj
+}

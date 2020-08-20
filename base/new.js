@@ -10,7 +10,7 @@ function _new() {
 }
 
 function new() {
-    let object = {};
+    let obj = {};
     let Con = [].shift().call(...arguments);
     obj.__proto__ = Con.prototype;
     let result = Con.apply(obj, arguments);
@@ -19,7 +19,7 @@ function new() {
 
 function new1 () {
     let obj = Object.create(null);
-    let Con = [].split.call(arguments);
+    let Con = [].shift().call(arguments);
     obj.__proto__ = Con.prototype;
     let result = Con.apply(obj, arguments)
     return typeof result === 'object' ? result : obj;

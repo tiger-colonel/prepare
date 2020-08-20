@@ -1,5 +1,5 @@
 export default (arr) => {
-    let arr = arr.sort((a,b) => a - b);
+    arr = arr.sort((a,b) => a - b);
     let r = [];
     let odd = 1;
     let even = 0;
