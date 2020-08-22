@@ -15,7 +15,7 @@ function searchSubArray(str) {
 }
 
 let a = '11001100';
-console.log('----------', searchSubArray(a));
+// console.log('----------', searchSubArray(a));
 
 function reverseStr(str) {
     return str.split(' ').map((item) => {
@@ -23,5 +23,44 @@ function reverseStr(str) {
     }).join(' ');
 }
 
-let testreverseStr = 'let\'s learn leecode everyday';
-console.log('----------', reverseStr(testreverseStr));
+// let testreverseStr = 'let\'s learn leecode everyday';
+// console.log('----------', reverseStr(testreverseStr));
+
+function phone(nums) {
+    const numMap = {
+        2: 'abc',
+        3: 'def',
+        4: 'ghi',
+        5: 'jki',
+        6: 'mno',
+        7: 'prqs',
+        8: 'tuv',
+        9: 'wxyz'
+    }
+    console.log('-----nums-----', nums);
+    let d = nums.split('');
+    d = d.map(num => {
+        return numMap[num].split('');
+    });
+    let arr = [];
+    
+    let help = (arr1, arr2) => {
+        // console.log('-----arr1,arr2-----', arr1,arr2);
+        arr1.forEach(i => {
+            arr2.forEach(j => {
+                arr.push(`${i}${j}`)
+            })
+        })
+        d.splice(0, 2, arr);
+        
+        if (d.length < 1) {
+            arr = [];
+            help(d[0], d[1])
+        }
+    }
+    help(d[0], d[1])
+    
+    return arr;
+}
+
+console.log('-----phone(23)-----', phone('23'));

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhaocheng.zhai
  * @Date: 2020-08-18 10:22:21
- * @LastEditTime: 2020-08-18 23:07:54
+ * @LastEditTime: 2020-08-20 18:49:50
  * @LastEditors: zhaocheng.zhai
  */
 function letterCombinations1(digits) {
@@ -43,7 +43,7 @@ function letterCombinations1(digits) {
 
     return arr
 }
-// console.log('----------', letterCombinations1());
+console.log('----------', letterCombinations1('2345'));
 
 // function getSubArr(array) {
 //     return array.reduce((t, v) => {
@@ -51,7 +51,7 @@ function letterCombinations1(digits) {
 //         // return t.push(t.map(i => v.concat(i)))
 //     }, [[]])
 // }
-// console.log('----------', getSubArr([1,2,3]));
+// console.log('----------', letterCombinations1('243'));
 
 function hasGroupSizeX(deck) {
     function gcd(num1, num2) {
@@ -70,5 +70,5 @@ function hasGroupSizeX(deck) {
     return g >= 2;
 }
 
-console.log('----------', hasGroupSizeX([1,2,3,4,4,3,2,1]));
+// console.log('----------', hasGroupSizeX([1,2,3,4,4,3,2,1]));
 

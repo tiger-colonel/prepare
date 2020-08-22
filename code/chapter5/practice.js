@@ -84,21 +84,19 @@ function maxRange(arr) {
 // 6. 缺失的第一个正数
 function firstPositiveNumber(arr) {
     arr = arr.filter(num => num > 0);
-    let min;
-    let len = arr.length - 1;
-    if (len < 1) {
-        return 1;
-    }
-    for (let i = 0; i < len; i++) {
+    for (let i = 0, len = arr.length, min; i < len; i++) {
         min = arr[i];
         for (let j = i + 1; j < len; j++) {
             if (min > arr[j]) {
+                let c = min;
+                min = arr[j];
+                arr[j] = c;
                 [arr[j], min] = [min, arr[j]]
             }
         }
         arr[i] = min;
         if (i > 0) {
-            if (arr[i + 1] - arr[i] > 1) {
+            if (arr[i] - arr[i - 1] > 1) {
                 return arr[i - 1] + 1;
             }
         } else {
@@ -106,7 +104,14 @@ function firstPositiveNumber(arr) {
                 return 1;
             }
         }
-        return arr.pop() + 1;
+    }
+    return arr.length ? arr.pop() + 1 : 1;
+}
+// 巧妙的解法
+function firstPositiveNumberByMap(nums) {
+    for (let i = 1; ; i++) {
+        if (!nums.includes(i))
+        return i;
     }
 }
 
@@ -164,5 +169,38 @@ function inPlace(arr) {
 // let a = quickSort([4,1,36,2,61,3]);
 // let a = inPlace([3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48])
 // let a = maxRange([3,6,8,1,18]);
-let a = firstPositiveNumber([1,2,0])
+let a = firstPositiveNumberByMap([3,4,-1,1])
 console.log(a);
+
+var firstMissingPositive1 = function(nums) {
+    if (!nums) {
+        return 1;
+    }
+    nums = nums.filter(num => num > 0);
+    if (nums.length < 1) {
+        return 1;
+    }
+    let min;
+    for(let i = 0; i < nums.length; i++) {
+        min = nums[i]
+        for(let j = i + 1; j < nums.length; j++) {
+            if (min > nums[j]){
+                [min, nums[j]] = [nums[j], min]
+            }
+        }
+        nums[i] = min;
+        if (i > 0) {
+            if (nums[i] - nums[i - 1] > 1) {
+                return nums[i - 1] + 1;
+            }
+        } else {
+            if (min !== 1) {
+                return 1;
+            }
+        }
+        return nums.pop() + 1;
+    }
+};
+
+// let a = firstMissingPositive1([1,2,0])
+// console.log(a);
