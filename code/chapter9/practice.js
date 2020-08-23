@@ -46,7 +46,6 @@ function sort(begin, end) {
 }
 
 let head = new NodeList([4,1,3,2,7,9,12,10]);
-let a = sort(head);
 let res = [];
 let next = head;
 while(next) {

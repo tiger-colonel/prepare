@@ -20,6 +20,28 @@ class NodeList {
     }
 }
 
+let findFlag = (begin, end) => {
+    let val = begin.val;
+    let p = begin;
+    let q = begin.next;
+    while (q !== end) {
+        if (q.val < val) {
+            p = p.next;
+            [p.val, q.val] = [q.val, p.val];
+        }
+        q = q.next;
+    }
+    [begin.val, p.val] = [p.val, begin.val];
+    return p;
+}
+
+let sort = (begin, end) => {
+    if (begin !== end) {
+        let flag = findFlag(begin, end);
+        sort(begin, flag)
+        sort(flag.next, end)
+    }
+}
 // 交换两个节点的值
 let swap = (p, q) => {
     let val = p.val;
