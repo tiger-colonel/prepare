@@ -163,7 +163,7 @@ function bubbleSort(arr) {
     }
     return arr;
 }
-console.log('-----bubbleSort-----', firstPostBySelectSort([41,21,32,43,5,7]));
+// console.log('-----bubbleSort-----', firstPostBySelectSort([41,21,32,43,5,7]));
 // 最大区间
 function maxRange(arr) {
     let min = 0;
@@ -182,7 +182,7 @@ function maxRange(arr) {
     }
     return max;
 }
-let a = maxK([4,6,1,93,7,34], 2);
+// let a = maxK([4,6,1,93,7,34], 2);
 // console.log('-----a-----', a);
 
 // 第k个最大元素
@@ -199,5 +199,38 @@ function maxK(arr, k) {
 }
 
 // 格雷编码
+function grayCode(k) {
+    if (k === 0) {
+        return [0];
+    } else if (k === 1) {
+        return [0, 1];
+    } else {
+        let prev = grayCode(k - 1);
+        let r = [];
+        let max = Math.pow(2, k) - 1;
+        for (let i = 0; i < prev.length; i++) {
+            r[i] = `0${prev[i]}`;
+            r[max - i] = `1${prev[i]}`;
+        }
+        return r;
+    }
+}
+
+// console.log('-----grayCode-----', grayCode(3).map(item => parseInt(item, 2)));
+
+function leastInterval(tasks, n) {
+    let timeObj = tasks.reduce((t, v) => ((t[v] = (t[v] || 0) + 1), t),{});
+    let values = Object.values(timeObj).sort((a, b) => b - a);
+    let maxNum = values[0];
+    let res = (maxNum - 1) * (n + 1) + 1;
+    let i = 1;
+    while (i < values.length && values[i] === maxNum) {
+        res++;
+        i++;
+    }
+    return Math.max(tasks.length, res);
+}
+
+console.log('----------',leastInterval(["A","A","A","B","B","B"]));
 
 

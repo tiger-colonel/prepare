@@ -63,4 +63,25 @@ function phone(nums) {
     return arr;
 }
 
-console.log('-----phone(23)-----', phone('23'));
+// console.log('-----phone(23)-----', phone('23'));
+
+function FindAllStr(str) {
+    // 00110011
+    let r = [];
+    for (let i = 0, tmp = 1; i < str.length; i++) {
+        console.log('-----arr[i]-----', str[i]);
+        if (str[i] == str[i+1]) {
+            tmp++;
+        } else {
+            r.push(tmp++);
+            tmp = 1;
+        }
+    }
+    let sum = 0;
+    for(let i = 0; i<r.length-1; i++) {
+        sum += Math.min(r[i], r[i+1]);
+    }
+    return sum;
+    
+}
+console.log('-----FindAllStr-----', FindAllStr('00110'));

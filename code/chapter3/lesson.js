@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhaocheng.zhai
  * @Date: 2020-08-18 10:22:21
- * @LastEditTime: 2020-08-25 12:21:51
+ * @LastEditTime: 2020-08-25 14:54:02
  * @LastEditors: zhaocheng.zhai
  */
 function letterCombinations1(digits) {
@@ -111,18 +111,22 @@ function group(deck) {
 
 var canPlaceFlowers = function(flowerbed, n) {
     let max = 0;
-    for(let i = 0; i < flowerbed.length - 1; i++) {
-        if (flowerbed[i] === 0) {
-            if (i === 0 && flowerbed[1] === 0) {
-                max++;
-                i++;
-            } else if (flowerbed[i-1] === 0 && flowerbed[i+1] === 0) {
+    flowerbed.unshift(0);
+    flowerbed.push(0);
+    for(let i = 1; i < flowerbed.length; i++) {
+        if (flowerbed[i] == 0) {
+            if (flowerbed[i-1] == 0 && flowerbed[i+1] == 0) {
+                flowerbed[i] = 1;
                 max++;
                 i++;
             }
+            if (max >= n) {
+                return true;
+            }
         }
     }
-    return max >= n;
+    return false;
 };
 
-console.log('-----canPlaceFlowers-----', canPlaceFlowers([1,0,0,0,1,0,0], 2));
+// console.log('-----canPlaceFlowers-----', canPlaceFlowers([1,0,1,0,1,0,1], 0));
+
