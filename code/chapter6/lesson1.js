@@ -28,7 +28,7 @@ function searchIp(str) {
         } else {
             for (let i = 0, len = Math.min(3, sub.length), tmp; i < len; i++) {
                 tmp = sub.substr(0, i+1);
-                console.log('-----tmp-----', tmp);
+                console.log('-----cur-----', cur);
                 if (tmp.length > 1 && tmp.substr(0,1) === '0') {
                     return ;
                 }

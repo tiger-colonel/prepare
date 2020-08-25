@@ -16,11 +16,7 @@ class NodeList {
         return head;
     }
 }
-function swap(p, q) {
-    let val = p.val;
-    p.val = q.val;
-    q.val = val;
-}
+
 function partion(begin, end) {
     let val = begin.val;
     let p = begin;
@@ -29,12 +25,10 @@ function partion(begin, end) {
         if (q.val < val) {
             p = p.next;
             [p.val, q.val] = [q.val, p.val];
-            // swap(p,q)
         }
         q = q.next;
     }
     [p.val, begin.val] = [begin.val, p.val];
-    // swap(p, begin);
     return p;
 }
 function sort(begin, end) {
@@ -46,6 +40,7 @@ function sort(begin, end) {
 }
 
 let head = new NodeList([4,1,3,2,7,9,12,10]);
+sort(head)
 let res = [];
 let next = head;
 while(next) {

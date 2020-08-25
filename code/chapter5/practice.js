@@ -17,7 +17,7 @@ function bubbleSort(arr) {
 function selectSort(arr) {
     for(let i = 0, len = arr.length, min; i < len; i++) {
         min = arr[i];
-        for(let j = i; j < len; j++) {
+        for (let j = i; j < len; j++) {
             if (min > arr[j]) {
                 [arr[j], min] = [min, arr[j]]
             }
@@ -137,6 +137,7 @@ function quickSort(arr) {
 // 8. in-place
 function inPlace(arr) {
     const swap = (arr, i, j) => [arr[i], arr[j]] = [arr[j], arr[i]];
+
     const findCenter = (arr, left, right) => {
         let idx = left + 1;
         for (let i = left; i <= right; i++) {
