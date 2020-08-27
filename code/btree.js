@@ -48,33 +48,38 @@ function isSymmetric(root) {
 class SearchTree {
     constructor(data) {
         let root = new TreeNode(data.shift());
-        for(let i = 0; i < data.length; i++) {
-            let node = new TreeNode(data[i])
-            this.insert(root, node);
-        }
+        data.forEach(item => {
+            this.insert(root, item)
+        })
+        return root;
     }
-    insert(root, node) {
-        if (node.val > root.val) {
+    insert(node, item) {
+        if (item > node.val) {
             if (node.right === undefined) {
-                root.right = node;
+                node.right = new TreeNode(item);
             } else {
-                this.insert(node.right, node)
+                this.insert(node.right, item)
             }
         } else {
             if (node.left === undefined) {
-                root.left = node;
+                node.left = new TreeNode(item);
             } else {
-                this.insert(node.left, node)
+                this.insert(node.left, item)
             }
         }
     }
-    walk(root) {
-        if (!root.left && !root.right) {
-            return true;
-        } else if ((root.left || root.left > root.val) || (root.right && root.right < root.val)) {
-            return false;
-        } else {
-            return this.walk(root.left)
-        }
+
+}
+function walk(root) {
+    if (!root.left && !root.right) {
+        return true;
+    } else if ((root.left && root.left > root.val) || (root.right && root.right < root.val)) {
+        return false;
+    } else {
+        return walk(root.left) && walk(root.right)
     }
 }
+
+let root = new SearchTree([10, 20, 25, 16, 6, 17, 11, 8, 5]);
+let res = walk(root)
+console.log('-----root-----',root, res);
