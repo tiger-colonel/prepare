@@ -68,18 +68,17 @@ class SearchTree {
             }
         }
     }
-
-}
-function walk(root) {
-    if (!root.left && !root.right) {
-        return true;
-    } else if ((root.left && root.left > root.val) || (root.right && root.right < root.val)) {
-        return false;
-    } else {
-        return walk(root.left) && walk(root.right)
+    static walk(root) {
+        if (!root.left && !root.right) {
+            return true;
+        } else if ((root.left && root.left > root.val) || (root.right && root.right < root.val)) {
+            return false;
+        } else {
+            return this.walk(root.left) && this.walk(root.right)
+        }
     }
 }
 
 let root = new SearchTree([10, 20, 25, 16, 6, 17, 11, 8, 5]);
-let res = walk(root)
+let res = SearchTree.walk(root)
 console.log('-----root-----',root, res);
