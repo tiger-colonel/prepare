@@ -12,11 +12,11 @@ class Heap {
             return iArr;
         } else {
             for (let i = Math.floor(n / 2); i >= 0; i--) {
-                Heap.maxhHeapify(iArr, i, n);
+                Heap.maxHeapify(iArr, i, n);
             }
             for (let j = 0; j < n; j++) {
                 Heap.swap(iArr, 0, n - 1 - j);
-                Heap.mexHeapify(iArr, 0, n - 1 - j - 1);
+                Heap.maxHeapify(iArr, 0, n - 1 - j - 1);
             }
             return iArr;
         }
@@ -42,3 +42,21 @@ class Heap {
         }
     }
 }
+
+let heap = new Heap([1, 10, 9, 5, 3, 11]);
+let a = heap.sort();
+// console.log('-----a-----', a);
+
+
+var frequencySort = function(s) {
+    let arr = s.split('');
+    let timeObj = arr.reduce((t, v) => ((t[v] = (t[v] || 0) + 1), t), {});
+    let tmp = [];
+    for (let key in timeObj) {
+        tmp.push({key, value: timeObj[key]})
+    }
+    tmp = tmp.sort((a, b) => b.value - a.value);
+    return tmp.reduce((t, v) => ((t += v.key.repeat(v.value)),t), '');
+};
+
+console.log('-----frequencySort-----', frequencySort('caaabb'));

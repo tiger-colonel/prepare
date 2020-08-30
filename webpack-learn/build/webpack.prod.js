@@ -1,12 +1,11 @@
 /* eslint-disable no-undef */
-let path = require('path');
 let webpack = require('webpack')
-let {cleanWebpackPlugin} = require('clean-webpack-plugin');
+let {CleanWebpackPlugin} = require('clean-webpack-plugin');
 let webpackCommonConf = require('./webpack.common')
-let {smart} = require('webpack-merge')
-let {srcPath, distPath} = require('./paths')
+let {merge} = require('webpack-merge')
+let {distPath} = require('./paths')
 
-module.exports = {
+module.exports = merge(webpackCommonConf, {
     mode: 'production',
     output: {
         // 输出文件的名称
@@ -43,9 +42,9 @@ module.exports = {
     },
     // plugins插件配置
     plugins: [
-        new cleanWebpackPlugin(), // 会默认清空output.Path 文件夹
+        new CleanWebpackPlugin(), // 会默认清空output.Path 文件夹
         new webpack.DefinePlugin({
             ENV: JSON.stringify('production')
         })
     ],
-};
+})

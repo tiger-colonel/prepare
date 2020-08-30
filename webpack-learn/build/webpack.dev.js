@@ -1,11 +1,10 @@
 /* eslint-disable no-undef */
-let path = require('path');
 let webpack = require('webpack')
-let {cleanWebpackPlugin} = require('clean-webpack-plugin');
+
 let webpackCommonConf = require('./webpack.common')
-let {smart} = require('webpack-merge')
+let {merge} = require('webpack-merge')
 let {distPath} = require('./paths')
-module.exports = smart(webpackCommonConf, {
+module.exports = merge(webpackCommonConf, {
     mode: 'development', 
     // loader配置
     module: {

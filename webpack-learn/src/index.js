@@ -1,7 +1,6 @@
 import data from './data';
 
 import css from './style.css';
-require('./a.css');
 
 function fn1() {
     console.log('-----fn1-----');

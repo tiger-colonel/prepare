@@ -20,6 +20,10 @@ let multiple = [...new Array(9).keys()].reduce((t, v, i) => t + [...new Array(i 
 function runPromiseInSequence(arr, input) {
     return arr.reduce((promiseChain, currentPromise) => promiseChain.then(currentPromise), Promise.resolve(input))
 }
+
+function runPromiseBySerial(arr, input) {
+  return arr.reduce((promiseChain, currentPromise) => promiseChain.then(currentPromise), Promise.resolve(input))
+}
 function p1(a) {
   return new Promise((resolve, reject) => resolve(a * 5));
 }
