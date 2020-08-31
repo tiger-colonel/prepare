@@ -9,7 +9,7 @@ const booleanTag = '[object Boolean]';
 const dateTag = '[object Date]';
 const regexpTag = '[object RegExp]';
 const symbolTag = '[object Symbol]';
-const funcTag = '[object Function]';
+// const funcTag = '[object Function]';
 const errorTag = '[object Error]';
 
 const deepTags = [mapTag, setTag, objectTag, arrayTag];

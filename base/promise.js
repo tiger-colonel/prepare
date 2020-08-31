@@ -1,13 +1,17 @@
 const all = (promises) => {
+    if (Array.isArray(promises)) {
+        throw new Error('请传数组')
+    }
+    let count = 0;
+    let arr = [];
     return new Promise((resolve, reject) => {
-        let arr = [];
-        let len = promises.length;
-        let count = 0;
-        for (let i = 0; i < len; i++) {
-            promises[i].then((res) => {
+        for (let i = 0; i < promises.length; i++) {
+            promise[i].then(res => {
                 arr[i] = res;
                 count++;
-                count === promises.length && resolve(arr);
+                if (count === promises.length) {
+                    resolve(arr);
+                }
             }, err => {
                 reject(err)
             })
@@ -15,17 +19,38 @@ const all = (promises) => {
     })
 }
 
-function resolvePromise(promise2, x, resolve, reject) {
+
+function isObject(target) {
+    return typeof !== null && (typeof target === 'object' || typeof target === 'function');
+}
+function resolvePromise(x, promise2, resolve, reject) {
     if (x === promise2) {
-        reject(new Error('sb'))
+        return reject(new Error('循环引用'))
     }
-    if (typeof promise2 !== null && (typeof promise2 === 'function' || typeof promise2 === 'object')) {
-        if (typeof x.then === 'function') {
-            x.then(() => {
-                resolvePromise(promise2, x, resolve, reject)
-            })
-        } else {
-            resolve(x);
+    // 防止多次调用
+    let called;
+    if (isObject(x)) {
+        try {
+            let then = x.then;
+            if (typeof then === 'function') {
+                then.call(x, y => {
+                    if (called) return;
+                    called = true;
+                    resolvePromise(x, promise2, resolve, reject)
+                }, err => {
+                    if (called) return;
+                    called = true;
+                    reject(err)
+                })
+            } else {
+                if (called) return;
+                called = true;
+                resolve(x)
+            }
+        } catch (error) {
+            if (called) return;
+            called = true;
+            reject(error)
         }
     } else {
         resolve(x);
@@ -33,68 +58,77 @@ function resolvePromise(promise2, x, resolve, reject) {
 }
 class Promise {
     constructor(exec) {
-        this.state = 'pending';
-        this.value = undefined;
-        this.reason = undefined;
-        this.fulfilledCallbacks = [];
-        this.rejectedCallbacks = [];
-
+        let state = 'pending';
+        let value;
+        let reason;
+        let resolvedFnCallbacks = [];
+        let rejectedFnCallbacks = [];
         let resolve = (value) => {
-            this.state = 'fulfilled';
-            this.value = value;
-            this.fulfilledCallbacks.forEach(fn => fn());
+            if (this.state === 'pending') {
+                this.state = 'fulfilled';
+                this.value = value;
+                this.resolvedFnCallbacks.forEach(fn => fn());
+            }
         }
         let reject = (reason) => {
-            this.state = 'rejected';
-            this.reason = reason;
-            this.rejectedCallbacks.forEach(fn => fn());
+            if (this.state === 'pending') {
+                this.state = 'rejected';
+                this.reason = reason;
+                this.rejectedFnCallbacks.forEach(fn => fn())
+            }
         }
         try {
-            exec(resolve, reject)
+            exec(resolve, reject);
         } catch (error) {
             reject(error)
         }
-        
     }
+
     then(onFulfilledFn, onRejectedFn) {
-        let promise2 = new Promise((resolve, reject) =>{
+        onFulfilledFn = typeof onFulfilledFn !== 'function' ? value => value : onFulfilledFn;
+        onRejectedFn = typeof onRejectedFn !== 'function' ? err => { throw err }: onRejectedFn;
+        let promise2 = new Promise((resolve, reject) => {
             if (this.state === 'fulfilled') {
-                try {
-                    setTimeout(() => {
+                setTimeout(() => {
+                    try {
                         let x = onFulfilledFn(this.value);
-                        resolvePromise(promise2, x, resolve, reject);
-                    });
-                } catch (error) {
-                    reject(error)
-                }
+                        resolvePromise(x, promise2, resolve, reject);
+                    } catch (error) {
+                        reject(error)
+                    }
+                });
             }
             if (this.state === 'rejected') {
-                try {
-                    setTimeout(() => {
-                        let x = onRejectedFn(this.value);
-                        resolvePromise(promise2, x, resolve, reject)
-                    });
-                } catch (error) {
-                    reject(error)
-                }
+                setTimeout(() => {
+                    try {
+                        let x = onRejectedFn(this.reason);
+                        resolvePromise(x, promise2, resolve, reject);
+                    } catch (error) {
+                        reject(error)
+                    }
+                });
             }
             if (this.state === 'pending') {
-                try {
-                    this.fulfilledCallbacks.push(() => {
-                        setTimeout(() => {
+                this.resolvedFnCallbacks.push(() => {
+                    setTimeout(() => {
+                        try {
                             let x = onFulfilledFn(this.value);
-                            resolvePromise(promise2, x, resolve, reject);
-                        });
-                    })
-                    this.rejectedCallbacks.push(() => {
-                        setTimeout(() => {
+                            resolvePromise(x, promise2, resolve, reject);
+                        } catch (e) {
+                            reject(e)
+                        }
+                    });
+                });
+                this.rejectedFnCallbacks.push(() => {
+                    setTimeout(() => {
+                        try {
                             let x = onRejectedFn(this.value);
-                            resolvePromise(promise2, x, resolve, reject);
-                        });
-                    })
-                } catch (error) {
-                    reject(error)
-                }
+                            resolvePromise(x, promise2, resolve, reject);
+                        } catch (e) {
+                            reject(e)
+                        }
+                    });
+                });
             }
         })
         return promise2;
