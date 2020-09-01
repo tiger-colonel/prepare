@@ -33,7 +33,7 @@ function cloneReg(target) {
     return result;
 }
 function cloneSymbol(target) {
-    return Object(Symbol.prototype.valueOf.vall(target));
+    return Object(Symbol.prototype.valueOf.call(target));
 }
 function cloneOtherType(target, type) {
     const Ctor = target.constructor;

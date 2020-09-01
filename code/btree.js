@@ -69,6 +69,9 @@ class SearchTree {
         }
     }
     static walk(root) {
+        if (!root) {
+            return true;
+        }
         if (!root.left && !root.right) {
             return true;
         } else if ((root.left && root.left > root.val) || (root.right && root.right < root.val)) {
@@ -79,7 +82,7 @@ class SearchTree {
     }
 }
 
-let root = new SearchTree([10, 20, 25, 16, 6, 17, 11, 8, 5]);
+let root = new SearchTree([5,1,4,null,null,3,6]);
 let res = SearchTree.walk(root)
 console.log('-----root-----',root, res);
 

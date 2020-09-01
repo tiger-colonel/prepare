@@ -19,7 +19,6 @@ const all = (promises) => {
     })
 }
 
-
 function isObject(target) {
     return typeof !== null && (typeof target === 'object' || typeof target === 'function');
 }
