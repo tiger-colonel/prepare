@@ -1,7 +1,7 @@
 const jsonp = ({url, params, callback}) => {
     const generateUrl = () => {
         let str = Object.entries(params).reduce((t, v) => {
-            t = `${v[0]}=${v[1]}`&;
+            t = `${v[0]}=${v[1]}&`
             return t;
         }, '');
         url = `${str}${Object.keys(params).length ? '?' : ''}`.replace(/&$/, '');

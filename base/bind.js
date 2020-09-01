@@ -1,3 +1,10 @@
+const baseBind = (context, ...args) => {
+    return (...newArgs) => {
+        return this.apply(context, ...args.concat(...newArgs))
+    }
+}
+
+
 Function.prototype.mybind = function(context) {
     if (typeof this !== 'function') {
         throw new Error('Bind must be called on a function')

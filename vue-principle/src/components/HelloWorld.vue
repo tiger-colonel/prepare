@@ -2,12 +2,24 @@
  * @Description: 
  * @Author: zhaocheng.zhai
  * @Date: 2020-04-20 18:47:41
- * @LastEditTime: 2020-07-24 15:13:53
+ * @LastEditTime: 2020-09-01 19:15:07
  * @LastEditors: zhaocheng.zhai
 --> 
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+      <el-tabs v-model="activeName" @tab-click="hangleTabChange">
+        <el-tab-pane label="用户管理" name="first">
+          <el-input v-model="firstValue"></el-input>
+        </el-tab-pane>
+        <el-tab-pane label="配置管理" name="second">
+          <el-input v-model="secondValue"></el-input>
+        </el-tab-pane>
+        <el-tab-pane label="角色管理" name="third">
+          <el-input v-model="thirdValue"></el-input>
+        </el-tab-pane>
+        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+      </el-tabs>
   </div>
 </template>
 
@@ -15,24 +27,23 @@
 export default {
   name: 'HelloWorld',
   props: ['msg'],
-  // beforeCreate () {
-  //   console.log('-----child beforeCreate-----', );
-  // },
-  // created () {
-  //   console.log('-----child crated-----');
-  // },
   beforeUpdate () {
     console.log('------child beforeUpdate----', );
   },
   updated () {
     console.log('-----child updated-----', );
   },
-  // beforeDestroy () {
-  //   console.log('-----child beforeDestroy-----', );
-  // },
-  // destroyed () {
-  //   console.log('-----child destroyed-----');
-  // }
+  data: () => ({
+      activeName: 'first',
+      firstValue: '',
+      secondValue: 'q234234',
+      thirdValue: '',
+  }),
+  methods: {
+      hangleTabChange() {
+        this.secondValue = '11111'
+      }
+  }
 
 }
 </script>

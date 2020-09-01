@@ -1,4 +1,9 @@
 // 原型链继承
+const baseExtend = (parent, child) => {
+    let prototype = Object.create(parent.prototype);
+    prototype.constructor = child;
+    child.prototype = prototype;
+}
 
 function GithubUser(username, password) {
     // private属性

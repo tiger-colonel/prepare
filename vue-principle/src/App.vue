@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: zhaocheng.zhai
  * @Date: 2020-04-20 18:47:41
- * @LastEditTime: 2020-08-10 23:44:27
+ * @LastEditTime: 2020-09-01 19:14:03
  * @LastEditors: zhaocheng.zhai
 --> 
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <!-- <HelloWorld v-if="destoryComponent" :msg="msg"/> -->
+    <HelloWorld :msg="msg"/>
     <div class="msg" ref="msg">{{msg}}</div>
     <br/>
     <div>-</div>
@@ -18,12 +18,12 @@
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    // HelloWorld
+    HelloWorld,
   },
   data: () => ({
     msg: 'Learn Vue priniple',

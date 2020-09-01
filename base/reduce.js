@@ -3,6 +3,23 @@
 let multiple = [...new Array(9).keys()].reduce((t, v, i) => t + [...new Array(i + 1).keys()].reduce((u,w,j) => `${u}${i + 1} x ${j + 1} = ${(i + 1) * (j + 1)} `, '').trim() + '\n', '\n');
 // console.log(multiple);
 
+// 实现自己的reduce
+
+Array.prototype.myReduce = function(callback, initialVal) {
+    const ctx = this
+    const length = ctx.length
+    let i = 0
+    let accumulator = initialVal || ctx[0]
+
+    while (i < length) {
+        accumulator = callback.call(null, accumulator, ctx[i], i, ctx)
+        i += 1
+    }
+    return accumulator
+}
+
+
+
 // ，求数组全部子集, 有两层concat
 // let b = [1,2,3,4,5,6].reduce((t, item) => t.concat(t.map(v => v.concat(item))), [[]])
 // console.log(b);
