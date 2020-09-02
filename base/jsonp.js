@@ -17,3 +17,27 @@ const jsonp = ({url, params, callback}) => {
         }
     })
 }
+
+class Stete {
+    constructor(state) {
+        this.state = state;
+    }
+    async test() {
+        try {
+            let sss = await this.test2();
+            console.log('-----sss-----', sss);
+        } catch (error) {
+            
+        }
+
+    }
+    test2 () {
+        setTimeout(() => {
+            console.log('-----123-----', 123);
+        }, 1000);
+    }
+}
+
+let a = new Stete();
+a.test();
+console.log('-----a-----', a);
