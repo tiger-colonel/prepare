@@ -119,28 +119,6 @@ function inPlace(arr) {
     return arr;
 }
 
-function inPlace(arr) {
-    let findCenter = (arr, left, right) => {
-        let idx = left + 1;
-        for (let i = left; i <= right; i++) {
-            if (arr[i] < arr[left]) {
-                [arr[i], arr[idx]] = [arr[idx], arr[i]];
-                idx++;
-            }
-        }
-        [arr[left], arr[idx - 1]] = [arr[idx - 1], arr[left]];
-        return idx;
-    }
-    function sort(arr, left, right) {
-        if (left < right) {
-            let center = findCenter(arr, left, right);
-            sort(arr, left, center - 1);
-            sort(arr, center, right);
-        }
-    }
-    sort(arr, 0, arr.length - 1)
-    return arr;
-}
 console.log('----------', inPlace([45,23,54,12,76,27,12,7,50,9,29]));
 
 // 缺失的第一个正数

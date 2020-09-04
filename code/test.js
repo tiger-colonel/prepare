@@ -87,4 +87,38 @@ function isBst(root) {
     return res
 }
 
+function maxDeepByBSF(root) {
+    if (!root) return 0;
+    let queue = [root];
+    let res = 0;
+    while(queue.length) {
+        let tmp = [];
+        for (let i = 0; i < queue.length; i++) {
+            if (queue[i].left) tmp.push(queue[i].left);
+            if (queue[i].right) tmp.push(queue[i].right);
+        }
+        res += 1;
+        queue = tmp;
+    }
+    return res;
+}
+
+function minDeepByBSF(root) {
+    if (!root)  return 0;
+    if (!root.right && !root.left) return 1;
+    let qq = [];
+    let ans = 0;
+    while(qq.length) {
+        let tmp = [];
+        ans++;
+        for (let i = 0; i< qq.length; i++) {
+            if (!qq[i].left && !qq[i].right) return ans;
+            if (qq[i].left) tmp.push(qq[i].left)
+            if (qq[i].right) tmp.push(qq[i].right)
+        }
+        qq = tmp;
+    }
+    return ans;
+}
+
 
