@@ -100,3 +100,17 @@ const isBst = root => {
     }
     return help(root);
 }
+
+// 删除节点
+
+const removeBST = (key, root) => {
+    // 1. 寻找要删除的节点
+    // 1.1 
+    let current = root;
+    let parent = null;
+    let isLeftChild = true;
+    while (current.val !== key) {
+        parent = current;
+        if (val < parent.val)
+    }
+}
