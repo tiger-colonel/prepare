@@ -205,16 +205,20 @@ function arrayByBSF(root) {
         let tmp = [];
         for (let i = 0; i < qu.length; i++) {
             arr.push(qu[i].val);
-            tmp.push(qu[i].left, qu[i].right);
+            if (qu[i].left) tmp.push(qu[i].left);
+            if (qu[i].right) tmp.push(qu[i].right);
         }
-        if (row % 2 !== 0) {
-            res.concat(arr.reverse())
+        if (row % 2 === 1) {
+            res.push(arr)
         } else {
-            res.concat(arr);
+            res.push(arr.reverse());
         }
+        qu = tmp;
     }
     return res;
 }
+
+console.log('-----arrayByBSF-----', arrayByBSF([3,9,20,null,null,15,7]));
 
 
 
