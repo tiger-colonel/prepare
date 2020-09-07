@@ -111,6 +111,8 @@ const removeBST = (key, root) => {
     let isLeftChild = true;
     while (current.val !== key) {
         parent = current;
-        if (val < parent.val)
+        if (key < parent.val) {
+            
+        }
     }
 }
