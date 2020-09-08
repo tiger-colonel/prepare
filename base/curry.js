@@ -67,8 +67,23 @@ Add.sumOf = () => {
 
 // let add2 = x => y => z => x + y + z;
 
-let a = Add(1, 2)(3)(9).sumOf();
-console.log('-----a-----', a);
+// let a = Add(1, 2)(3)(9).sumOf();
+// console.log('-----a-----', a);
+
+const multiply = (num) => {
+    if (num === 0) return 1;
+    return num * multiply(num - 1);
+}
+
+const multiply1 = (num, total) => {
+    if (num === 0) return total;
+    // 5 * 4 * multiply1(3, 4 * 5);
+    return multiply1(num - 1, num * total);
+}
+
+console.log('-----multiply1-----', multiply1(5, 1));
+
+
 
 
 
