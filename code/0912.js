@@ -1,21 +1,36 @@
 // 数组的交集 350
-function jiaoji(nums1, nums2) {
-    // if (arr1.length < arr2.length) {
-    //     return arr1.reduce((t, v) => (arr2.includes(v) ? t.push(v) : t, t), []);
-    // } else {
-    //     return arr2.reduce((t, v) => (arr1.includes(v) ? t.push(v) : t, t), []);
-    // }
-    let result = [];
-    let map = new Map();
-    nums1.forEach(item => {
-        map.set(item, item);
-    });
+// 1. 哈希
+function intersect(nums1, nums2) {
+    let res = [];
+    let nums1Map = nums1.reduce((map, v) => (map.set(v, (map.get(v) || 0) + 1), map), new Map());
     nums2.forEach(item => {
-        if (map.has(item)) {
-            result.push(item)
+        let val = nums1Map.get(item);
+        if (val) {
+            res.push(item);
+            nums1Map.set(item, val - 1);
         }
     });
-    return result;
+    return res;
+}
+// 2. 双指针
+function intersect1(nums1, nums2) {
+    nums1.sort((a, b) => a - b);
+    nums2.sort((a, b) => a - b);
+    let res = [];
+    let p1 = 0;
+    let p2 = 0;
+    while(p1 < nums1.length && p2 < nums2.length) {
+        if (nums1[p1] < nums2[p2]) {
+            p1++;
+        } else if (nums1[p1] > nums2[p2]) {
+            p2++;
+        } else if (nums1[p1] === nums2[p2]) {
+            res.push(nums1[p1]);
+            p1++;
+            p2++
+        }
+    }
+    return res;
 }
 
-console.log('-----jiaoji-----', jiaoji([1,2], [1,1]));
+console.log('-----jiaoji-----', intersect1([1,2,2,2,2,2], [1,1,1,1,1,2,2,2,3,4,4,3]));
