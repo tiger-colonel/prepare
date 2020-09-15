@@ -12,25 +12,31 @@ function maxProfix(prices) {
     return sum;
 }
 
-// 节流， 给事件加锁，监听页面滚动事件，提高性能
+// 节流， 给事件加锁，1. 监听页面滚动事件，2 input 实时搜索
 function throttle(fn, wait) {
     let timer;
-    if (timer) return;
-    timer = setTimeout(() => {
-        fn();
-        clearTimeout(timer);
-    }, wait);
+    return function(...args) {
+        if (timer) return;
+        timer = setTimeout(() => {
+            fn(...args);
+            timer = null;
+        }, wait);
+    }
 }
-// 防抖， 事件清零
+// 防抖， 事件清零，1. 发短信，2. 调整浏览器窗口大小，
 function debounce(fn, wait) {
     let timer;
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => {
-        fn();
-    }, wait);
+    return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn(...args);
+        }, wait);
+    }
 }
 
 // bind 
-function myBind(context, args) {
-    
+function myBind(context, ...args) {
+    return (...newArgs) => {
+        context.apply(context, ...args.concat(...newArgs))
+    }
 }
