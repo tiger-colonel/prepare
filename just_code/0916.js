@@ -26,18 +26,6 @@ function deleteCommon(nums) {
         q++
     }
     return p + 1;
-        let len = nums.len;
-    if (len < 1) return nums;
-    let i = 0;
-    let j = 1;
-    while (j < len) {
-        if (nums[i] !== nums[j]) {
-            nums[i + 1] = nums[j];
-            i++;
-        }
-        j++;
-    }
-    return i + 1;
 }
 
 console.log('-----reverseArray-----', reverseArray([1,2,3,4,5,6,7], 3));
