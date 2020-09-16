@@ -40,3 +40,40 @@ function myBind(context, ...args) {
         context.apply(context, ...args.concat(...newArgs))
     }
 }
+
+function inorderTraversal(root) {
+    let nums = [];
+    let stack = [];
+    while (root) {
+        stack.push(root);
+        root = root.left;
+    }
+
+    while(stack.length) {
+        let root = stack.pop();
+        nums.push(root.val);
+        root = root.right;
+        while (root) {
+            stack.push(root);
+            root = root.left;
+        }
+    }
+}
+
+function bstByColor(root) {
+    // let white = 0, gray = 1;
+    let res = [];
+    let stack = [[0, root]];
+    while (stack.length) {
+        let [color, node] = stack.pop();
+        if (!node) continue;
+        if (color === 0) {
+            stack.push([0, node.right])
+            stack.push([1, node])
+            stack.push([0, node.left])
+        } else {
+            res.push(node.val)
+        }
+    }
+    return res;
+}
