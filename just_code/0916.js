@@ -52,4 +52,21 @@ function inPlace(arr) {
     return arr;
 }
 
+// 页面平滑的滚动到顶部
+function scrollToTopAnimation(time) {
+    let scrollTop = (document.documentElement || document.body).scrollTop;
+    const frameTime = 1000 / 60; // 每一帧的时间
+    const frameNum = time /frameTime; // 执行次数
+    const stepLength = scrollTop / frameNum; // 步长
+
+    const step = () => {
+        const scrollTop = (document.documentElement || document.body).scrollTop;
+        if (scrollTop > 0) {
+            window.scrollTop(0, scrollTop - stepLength);
+            requestAnimationFrame(step);
+        }
+    }
+    step();
+}
+
 // console.log('-----inPlace-----', inPlace([18,27,3,25,12,9,35]));
