@@ -17,5 +17,3 @@ var removeNthFromEnd = function(head, n) {
     p.next = p.next.next;
     return beforeHead.next;
 }
-
-
