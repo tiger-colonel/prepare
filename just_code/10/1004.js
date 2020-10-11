@@ -22,3 +22,10 @@ function limit(count, array, iterateFunc) {
     }
     return execute().then(() => Promise.all(tasks))
 }
+
+// 异步串行 || 异步并行
+function asyncAdd(a, b, cb) {
+    setTimeout(() => {
+        cb(null, a + b)
+    }, 1000);
+}

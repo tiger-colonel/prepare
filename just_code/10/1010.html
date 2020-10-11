@@ -1,0 +1,93 @@
+<!--
+ * @Description: 
+ * @Author: zhaocheng.zhai
+ * @Date: 2020-10-10 12:48:40
+ * @LastEditTime: 2020-10-11 22:52:53
+ * @LastEditors: zhaocheng.zhai
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise面试题</title>
+</head>
+<body>
+    <div>
+        <input type="text" id="ipt">
+        <div>
+            <button id="a">按钮A</button>
+            <button id="b">按钮B</button>
+        </div>
+        <div id="text"></div>
+    </div>
+    <div>
+        <ul>
+            <li>hello 1</li>
+            <li>hello 2</li>
+            <li>hello 3</li>
+            <li>hello 4</li>
+          </ul>
+    </div>
+    <script>
+        let a = document.querySelector('#a');
+        let b = document.querySelector('#b');
+        let i = document.querySelector('#ipt');
+        let text = document.querySelector('#text');
+        // 全局变量P保存promise实例
+        let P = Promise.resolve();
+        let acount = 1;
+        a.onclick = function() {
+            P = P.then(() => {
+                setTimeout(() => {
+                    text.innerHTML += `a${acount++}-`
+                }, 1000);
+            })
+        }
+        let bcount = 1;
+        b.onclick = function() {
+            P = P.then(() => {
+                setTimeout(() => {
+                    text.innerHTML += `b${bcount++}-`
+                }, 1000);
+            })
+        }
+        // a.onclick = function() {
+        //     P = P.then(() => new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve();
+        //             // i.value = 'a'
+        //             text.innerHTML += 'a'
+        //         }, 1000);
+        //     }))
+        // }
+        // b.onclick = function() {
+        //     P = P.then(() => new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             resolve();
+        //             text.innerHTML += 'b'
+        //         }, 1000);
+        //     }))
+        // }
+         
+    </script>
+    <script>
+        let ul = document.querySelectorAll('ul')[0]
+        let aLi = document.querySelectorAll('li')
+        for(let i=0; i<aLi.length; i++){  
+            aLi[i].addEventListener('click',function(e){
+                let oLi1 = e.target;
+                let oLi2 = e.currentTarget;
+                console.log('1', oLi1)  // li
+                console.log('2', oLi2)  // li
+                console.log(oLi1===oLi2)  // true
+            })
+        }
+        ul.onclick = function(e) {
+            console.log('-----e.target-----', e.target);
+            console.log('-----e.currentTarget-----', e.currentTarget);
+            console.log('123123')
+        }
+    </script>
+</body>
+</html>
