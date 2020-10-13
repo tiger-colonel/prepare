@@ -21,6 +21,7 @@ Array.prototype.myReduce = function(callback, initialValue) {
     return accumulator;
 }
 
+
 // 4. call
 Function.prototype.myCall = function(context = window, args) {
     if (typeof this !== 'function') {
@@ -59,6 +60,17 @@ Function.prototype.myBind = function(context, ...args) {
     }
 }
 
+
+function myBind(context, args) {
+    let self = this;
+    return function F() {
+        if (this instanceof F) {
+            return new self(...args, ...arguments)
+        }
+        return self.call(context, ...args, ...arguments)
+    }
+}
+
 // 7. 防抖, 是清零
 function debounce(fn, wait) {
     let timer;
@@ -71,13 +83,25 @@ function debounce(fn, wait) {
 }
 
 // 8. 节流 是加锁
-function debounce(fn, wait) {
+function throttle(fn, wait) {
     let flag = true;
     return function() {
         if (!flag) return;
         flag = false;
         setTimeout(() => {
-            fn.apply(fn, ...arguments);
+            fn.apply(this, ...arguments);
+            flag = true;
+        }, wait);
+    }
+}
+
+function throttle(fn, wait) {
+    let flag = true;
+    return function () {
+        if (!flag) return;
+        flag = false;
+        setTimeout(() => {
+            fn.call(this, ...arguments);
             flag = true;
         }, wait);
     }
@@ -95,5 +119,61 @@ function add() {
     }
     return fn;
 }
+
 console.log('-----add(1)(2)(3)(4)-----', add(1)(1,2,3)(2).valueOf());
+
+
+// 10. new
+function factory(ctor, ...args) {
+    if (typeof ctor !== 'function') {
+        throw new Error('Type Error')
+    }
+    const obj = Object.create(ctor.prototype);
+    const res = ctor.call(obj, ...args);
+    return typeof res === 'object' ? res : obj;
+}
+
+// 11. instanceof
+function myInstanceOf(left, right) {
+    if (typeof left !== 'object' || typeof left === null) {
+        return false;
+    }
+    let proto = left.__proto__;
+    let prototype = right.prototype;
+    while(true) {
+        if (proto === null) return false;
+        if (proto === prototype) return true;
+        proto = proto.__proto__;
+    }
+}
+
+// 12.组合寄生继承
+function extend(parent, child) {
+    let prototype = Object.create(parent);
+    prototype.contructor = child;
+    child.prototype = prototype;
+}
+
+// Object.create()
+function create(proto) {
+    function F() {};
+    F.prototype = proto;
+    return new F();
+}
+
+// deepclone
+function deepclone(target, map = new Map()) {
+    if (typeof target !== 'object' || typeof !== 'function') {
+        return target;
+    }
+    
+    if (map.has(target)) return map.get(target);
+
+    let cloneTarget = Array.isArray(target) ? [] : {};
+    map.set(target, cloneTarget);
+    for (const key in target) {
+        cloneTarget[key] = deepclone(target[key], map)
+    }
+    return cloneTarget;
+}
 
