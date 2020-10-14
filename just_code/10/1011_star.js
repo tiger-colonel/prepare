@@ -120,7 +120,7 @@ function add() {
     return fn;
 }
 
-console.log('-----add(1)(2)(3)(4)-----', add(1)(1,2,3)(2).valueOf());
+// console.log('-----add(1)(2)(3)(4)-----', add(1)(1,2,3)(2).valueOf());
 
 
 // 10. new
@@ -161,19 +161,67 @@ function create(proto) {
     return new F();
 }
 
-// deepclone
+// 13. deepclone
 function deepclone(target, map = new Map()) {
-    if (typeof target !== 'object' || typeof !== 'function') {
+    if (typeof target !== 'object' || typeof target !== 'function') {
         return target;
     }
-    
+    const isArray = Array.isArray(target);
     if (map.has(target)) return map.get(target);
 
-    let cloneTarget = Array.isArray(target) ? [] : {};
+    let cloneTarget = isArray ? [] : {};
     map.set(target, cloneTarget);
-    for (const key in target) {
-        cloneTarget[key] = deepclone(target[key], map)
+    const arr = isArray ? target : Object.keys(target);
+    const len = arr.length;
+    let i = 0;
+    while (i < len) {
+        cloneTarget[arr[i]] = deepclone(target[arr[i]], map);
+        i++;
     }
     return cloneTarget;
 }
+
+const target = {
+    field1: 1,
+    field2: undefined,
+    field3: {
+        child: 'child'
+    },
+    field4: [2, 4, 8],
+    f: { f: { f: { f: { f: { f: { f: { f: { f: { f: { f: { f: {} } } } } } } } } } } },
+};
+target.target = target;
+// console.log('-----deepclone-----', deepclone(target));
+
+// 14. promise 并行限制
+function limit(max, array, callback) {
+    let allTasks = [];
+    let maxTasks = [];
+    let i = 0;
+    let promise = Promise.resolve();
+    let run = () => {
+        if (i === array.length) {
+            return promise;
+        }
+
+        const task = promise.then(() => callback(array[i++]));
+        allTasks.push(task);
+        console.log('-----allTasks-----', allTasks);
+
+        let executing = task.then(() => maxTasks.splice(maxTasks.indexOf(executing), 1));
+        maxTasks.push(executing);
+        
+        let r = promise;
+        if (maxTasks.length >= max) {
+            r = Promise.race(maxTasks)
+        }
+        return r.then(() => run());
+    }
+    return run().then(() => Promise.all(allTasks))
+}
+
+const timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
+limit(2, [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout).then((res) => {
+  console.log(res)
+})
 
