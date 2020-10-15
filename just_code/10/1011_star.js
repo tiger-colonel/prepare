@@ -220,8 +220,11 @@ function limit(max, array, callback) {
     return run().then(() => Promise.all(allTasks))
 }
 
-const timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
-limit(2, [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout).then((res) => {
-  console.log(res)
-})
+// const timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
+// limit(2, [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout).then((res) => {
+//   console.log(res)
+// })
+
+// 15. jsonp
+
 

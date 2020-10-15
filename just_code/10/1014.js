@@ -29,7 +29,7 @@ function limit(count, array, callback) {
 }
 
 // test
-var timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
-limit(2, [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007], timeout).then((res) => {
-  console.log(res)
-});
+// var timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
+// limit(2, [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007], timeout).then((res) => {
+//   console.log(res)
+// });
