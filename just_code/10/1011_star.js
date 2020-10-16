@@ -236,11 +236,93 @@ const jsonp = ({url, params, callbackName}) => {
         const scriptEle = document.createElement('script');
         scriptEle.src = generateUrl();
         document.body.appendChild(scriptEle);
-        window[callbackName]  = data => {
+        window[callbackName] = data => {
             resolve(data);
             document.removeChild(scriptEle)
         }
     })
 }
+
+// 16. ajax
+function ajax(url, method) {
+    return new Promise(resolve => {
+        let xhr = new XMLHTMLRequest();
+        xhr.open(method, url, true);
+        xhr.onreadystatechange = function() {
+            const {readyState, status} = xhr;
+            if (readyState === 4 && (xhr.status === 200 || xhr.status === 404)) {
+                resolve(xhr.response)
+            }
+        }
+        xhr.send();
+    })
+}
+
+// 17. events模块
+class Events {
+    constructor() {
+        this.events = new Map();
+    }
+    on(type, handler, once) {
+        let eventsOfType = this.events.get(type);
+        if (!eventsOfType) {
+            this.events.set(event, [])
+        }
+        if (!eventsOfType.includes(handler)) {
+            this.events.set(event, eventsOfType.push(handler));
+            if (once) {
+                handler.once = true;
+            }
+        }
+    }
+    off(type, handler) {
+        let eventsOfType = this.events.get(type);
+        if (!hanlder) {
+            eventsOfType = [];
+            return false;
+        }
+        eventsOfType.filter(fn => handler !== fn)
+    }
+    emit(type, eventData = {}) {
+        this.events.get(type).forEach(fn => {
+            fn.call(null, eventData);
+            if (fn.once) {
+                this.off(type, fn)
+            }
+        });
+    }
+    once(event) {
+        let flag = true;
+    }
+}
+
+// 18. settimeout实现setInterval
+let timeWorker = {};
+function mySetInterval(fn, wait) {
+    let key = Symbol();
+    const execu = (fn, wait) => {
+        timeWorker[key] = setTimeout(() => {
+            fn();
+            execu(fn, wait)
+        }, wait);
+    }
+    execu(fn, wait);
+    return key;
+}
+let a = mySetInterval(() => console.log('1'), 3000);
+
+function myClearInterval(key) {
+    console.log('-----timerW-----', key, timeWorker);
+    if (key in timeWorker) {
+        clearTimeout(timeWorker[key]);
+        delete timeWorker[key]
+    }
+}
+
+setTimeout(() => {
+    myClearInterval(a);
+}, 4000);
+
+// 19. 懒加载 && vue的lazy-load的实现
 
 

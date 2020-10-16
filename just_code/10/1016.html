@@ -1,0 +1,46 @@
+<!--
+ * @Description: 
+ * @Author: zhaocheng.zhai
+ * @Date: 2020-10-16 16:15:41
+ * @LastEditTime: 2020-10-16 16:32:52
+ * @LastEditors: zhaocheng.zhai
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖拽</title>
+</head>
+<body>
+    <img id="ball" src="https://js.cx/clipart/ball.svg" alt="">
+    <script>
+        const ball = document.querySelector('#ball');
+        ball.onmousedown = function(e) {
+            let shiftX = e.clientX - ball.getBoundingClientRect().left;
+            let shiftY = e.clientY - ball.getBoundingClientRect().top;
+            ball.style.position = 'absolute';
+            ball.style.zIndex = 1000;
+            document.body.append(ball);
+            moveAt(e.pageX, e.pageY);
+            function moveAt(pageX, pageY) {
+                ball.style.left = pageX - shiftX + 'px';
+                ball.style.top = pageY - shiftY + 'px';
+            }
+            function onMouseMove(e) {
+                moveAt(e.pageX, e.pageY)
+            }
+            
+            document.addEventListener('mousemove', onMouseMove);
+
+            ball.onmouseup = function() {
+                document.removeEventListener('mousemove', onMouseMove);
+                ball.onmouseup = null;
+            }
+        }
+        ball.ondragstart = function() {
+            return false;
+        }
+    </script>
+</body>
+</html>

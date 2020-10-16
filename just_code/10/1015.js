@@ -1,4 +1,4 @@
-
+// 返回最后一次请求的值
 function lastPromise(promiseFn) {
     let resetReturn;
     return function() {
