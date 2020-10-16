@@ -226,5 +226,21 @@ function limit(max, array, callback) {
 // })
 
 // 15. jsonp
+const jsonp = ({url, params, callbackName}) => {
+    const generateUrl = () => {
+        let url = '';
+        url = Object.keys(params).reduce((t, v) => (t += `${v}=${params[v]}&`, t), '');
+        return url.substr(0, url.length - 1);
+    }
+    return new Promise((ersolve, reject) => {
+        const scriptEle = document.createElement('script');
+        scriptEle.src = generateUrl();
+        document.body.appendChild(scriptEle);
+        window[callbackName]  = data => {
+            resolve(data);
+            document.removeChild(scriptEle)
+        }
+    })
+}
 
 
