@@ -312,7 +312,6 @@ function mySetInterval(fn, wait) {
 let a = mySetInterval(() => console.log('1'), 3000);
 
 function myClearInterval(key) {
-    console.log('-----timerW-----', key, timeWorker);
     if (key in timeWorker) {
         clearTimeout(timeWorker[key]);
         delete timeWorker[key]
@@ -324,5 +323,17 @@ setTimeout(() => {
 }, 4000);
 
 // 19. 懒加载 && vue的lazy-load的实现
+function lazyload() {
+    const imgs = document.getElementByTagName('img');
+    const len = imgs.length;
+    // 视口的高度
+    const viewHeight = document.documentElement.clientHeight;
+    // 滚动条到顶部的高度
+    const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
+    for (let i = 0; i < len; i++) {
+        const offsetHeight = imgs[i].offsetTop;
+        
+    }
+}
 
 
