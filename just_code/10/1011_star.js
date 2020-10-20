@@ -332,8 +332,37 @@ function lazyload() {
     const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
     for (let i = 0; i < len; i++) {
         const offsetHeight = imgs[i].offsetTop;
-        
+
     }
 }
+
+// 20. 渲染几万条数据页面不卡顿， 使用requestAnimationFrame
+setTimeout(() => {
+    const total = 100000;
+    // 一次插入的数据
+    const once = 20;
+    // 插入数据需要的次数
+    const loopCount = Math.ceil(total / once);
+    let countOfRender = 0;
+    const ul = document.querySelector('ul');
+    // 添加数据的方法
+    function add() {
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < once; i++) {
+            const li = document.createElement('li');
+            li.innerText = Math.random() * total;
+            fragment.appendChild(li)
+        }
+        ul.appendChild(fragment)
+        countOfRender++;
+        loop();
+    }
+    function loop() {
+        if (countOfRender < loopCount) {
+            window.requestAnimationFrame(add)
+        }
+    }
+    loop();
+}, 0);
 
 

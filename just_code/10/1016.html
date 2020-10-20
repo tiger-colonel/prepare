@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhaocheng.zhai
  * @Date: 2020-10-16 16:15:41
- * @LastEditTime: 2020-10-16 16:32:52
+ * @LastEditTime: 2020-10-18 23:30:37
  * @LastEditors: zhaocheng.zhai
 -->
 <!DOCTYPE html>
@@ -13,8 +13,9 @@
     <title>拖拽</title>
 </head>
 <body>
-    <img id="ball" src="https://js.cx/clipart/ball.svg" alt="">
-    <script>
+    <!-- <img id="ball" src="https://js.cx/clipart/ball.svg" alt=""> -->
+    <ul></ul>
+    <!-- <script>
         const ball = document.querySelector('#ball');
         ball.onmousedown = function(e) {
             let shiftX = e.clientX - ball.getBoundingClientRect().left;
@@ -41,6 +42,69 @@
         ball.ondragstart = function() {
             return false;
         }
+    </script> -->
+    <script>
+        console.time();
+        setTimeout(() => {
+            const total = 1200;
+            // 一次插入的数据
+            const once = 20;
+            // 插入数据需要的次数
+            const loopCount = Math.ceil(total / once);
+            let countOfRender = 0;
+            const ul = document.querySelector('ul');
+            // 添加数据的方法
+            function add() {
+                console.log('-----11-----', 11);
+                const fragment = document.createDocumentFragment();
+                for (let i = 0; i < once; i++) {
+                    const li = document.createElement('li');
+                    li.innerText = Math.floor(Math.random() * total);
+                    fragment.appendChild(li);
+                }
+                ul.appendChild(fragment)
+                countOfRender++;
+                loop();
+            }
+            function loop() {
+                if (countOfRender < loopCount) {
+                    window.requestAnimationFrame(add)
+                } else {
+                    console.timeEnd();
+                }
+            }
+            loop();
+        }, 0);
     </script>
+    <!-- <script>
+    setTimeout(() => {
+        // 插入十万条数据
+        const total = 100000;
+        // 一次插入的数据
+        const once = 20;
+        // 插入数据需要的次数
+        const loopCount = Math.ceil(total / once);
+        let countOfRender = 0;
+        const ul = document.querySelector('ul');
+        // 添加数据的方法
+        function add() {
+            const fragment = document.createDocumentFragment();
+            for(let i = 0; i < once; i++) {
+                const li = document.createElement('li');
+                li.innerText = Math.floor(Math.random() * total);
+                fragment.appendChild(li);
+            }
+            ul.appendChild(fragment);
+            countOfRender += 1;
+            loop();
+        }
+        function loop() {
+            if(countOfRender < loopCount) {
+            window.requestAnimationFrame(add);
+            }
+        }
+        loop();
+        }, 0)
+    </script> -->
 </body>
 </html>
