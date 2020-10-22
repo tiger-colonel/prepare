@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="shortcut icon" href="https://b0.beicdn.com/img/favicon.ico" type="image/x-icon" />
+    <link ref="dns-prefetch" href="h0.beicdn.com" />
+    <link ref="dns-prefetch" href="b0.beicdn.com" />
+    <link ref="dns-prefetch" href="b1.beicdn.com" />
+    <link ref="dns-prefetch" href="b2.beicdn.com" />
+    <link ref="dns-prefetch" href="b3.beicdn.com" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <title><%= title %></title>
+    <!-- {{css}} 代码上传oss时，会替换成真实的url， 见vm_lowcode/index.js uploadToRemote方法 -->
+    <link rel="stylesheet" href="{{css}}" />
+  </head>
+  <body>
+    <div id="lowcode_app"></div>
+    <script type="text/javascript" src="//h5apps.beicdn.com/hms3_dev/libs/vue.runtime.js"></script>
+    <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+    <!-- {{js}} 同上{{css}} -->
+    <script type="text/javascript" src="{{js}}" async></script>
+  </body>
+</html>

@@ -365,4 +365,30 @@ setTimeout(() => {
     loop();
 }, 0);
 
+// 21. koa中间件 compose原理
+function compose(middleware) {
+    // 检验middleware为array，校验每个中间件函数必须为函数
+    return function(ctx, next) {
+        let index = -1;
+        return dispatch(0);
+        function dispatch(i) {
+            // i 是即将执行中间件的索引, index 是已经执行的中间件的索引
+            if (i <= index) {
+                return Promise.reject(new Error('next() 调用多次'))
+            }
+            index = i;
+            let fn = middleware[i];
+            if (i === middleware.length) fn = next;
+            if (!fn) return Promise.resolve();
+            try {
+                const nextt = dispatch.bind(null, i + 1);
+                const fnResult = fn(context, next);
+                return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
+            } catch (err) {
+                return Promise.reject(err)
+            }
+        }
+    }
+}
+
 
