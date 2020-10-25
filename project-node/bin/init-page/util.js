@@ -4,7 +4,7 @@ const symbol = require('log-symbols');
 
 const isExist = (path) => new Promise((resolve, reject) => {
     fs.access(path, (err) => {
-        reject(!err)
+        resolve(!err)
     })
 })
 
