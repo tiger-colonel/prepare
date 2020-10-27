@@ -2,30 +2,44 @@
  * @Description: 
  * @Author: zhaocheng.zhai
  * @Date: 2020-04-20 18:47:41
- * @LastEditTime: 2020-09-01 19:14:03
+ * @LastEditTime: 2020-10-27 13:17:10
  * @LastEditors: zhaocheng.zhai
 --> 
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <!-- <MonacoEditor
+      width="800"
+      height="500"
+      theme="vs-dark"
+      language="javascript"
+      :options="options"
+      @change="onChange"
+    ></MonacoEditor> -->
+    <Monaco></Monaco>
+    <!-- <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld :msg="msg"/>
     <div class="msg" ref="msg">{{msg}}</div>
     <br/>
     <div>-</div>
     <div @click="handleChangePage">点击改变页面message</div>
-    <!-- <div @click="handleDestoryPage">销毁子组件</div> -->
+    <div @click="handleDestoryPage">销毁子组件</div> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue';
+import Monaco from './components/monaco';
+// import MonacoEditor from 'monaco-editor-vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    // HelloWorld,
+    // MonacoEditor,
+    Monaco,
   },
   data: () => ({
+    options: {},
     msg: 'Learn Vue priniple',
     count: 1,
     destoryComponent: true,
@@ -59,6 +73,9 @@ export default {
     },
     handleDestoryPage() {
       this.destoryComponent = !this.destoryComponent;
+    },
+    onChange(value) {
+      console.log('-----value-----', value);
     }
   }
 }
