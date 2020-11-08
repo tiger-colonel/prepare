@@ -16,7 +16,20 @@ class NodeList {
         return head;
     }
 }
-
+function partion(begin, end) {
+    let val = begin.val;
+    let p = begin;
+    let q = begin.next;
+    while(q !== end) {
+        if (q.val < val) {
+            p = p.next;
+            [p.val, q.val] = [q.val, p.val]
+        }
+        q = q.next;
+    }
+    [p.val, begin.val] = [begin.val, p.val];
+    return p;
+}
 function partion(begin, end) {
     let val = begin.val;
     let p = begin;

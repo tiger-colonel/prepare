@@ -16,7 +16,7 @@ function limit(count, array, callback) {
         const doing = task.then(() => executing.splice(executing.indexOf(doing), 1));
         // 3. 将正在执行的promise插入executing数组
         executing.push(doing);
-        console.log('-----executing-----', executing);
+        // console.log('-----executing-----', executing);
         // 如果正在执行的promise达到了limit，使用Promise.race让已经执行好的promise先出去，新的promise再进来
         let res = promise;
         if (executing.length >= count) {
@@ -29,7 +29,8 @@ function limit(count, array, callback) {
 }
 
 // test
-// var timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
-// limit(2, [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007], timeout).then((res) => {
-//   console.log(res)
-// });
+var timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
+
+limit(3, [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010], timeout).then((res) => {
+  console.log(res)
+});

@@ -60,3 +60,12 @@ var frequencySort = function(s) {
 };
 
 console.log('-----frequencySort-----', frequencySort('caaabb'));
+
+
+
+1
+rand
+succeed-1
+1
+rand
+succeed-2

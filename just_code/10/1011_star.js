@@ -29,13 +29,13 @@ Function.prototype.myCall = function(context = window, args) {
     }
     const fn = Symbol('fn');
     context[fn] = this;
-    let res = context[fn](...args)
+    let res = context[fn](...args);
     delete context[fn];
     return res;
 }
 
 // 5. apply
-Function.prototype.myCall = function(context = window, ...args) {
+Function.prototype.myApply = function(context = window, ...args) {
     if (typeof this !== 'function') {
         throw new Error('Type Error')
     }
@@ -220,6 +220,28 @@ function limit(max, array, callback) {
     return run().then(() => Promise.all(allTasks))
 }
 
+function limit(max, array, callback) {
+    let allTasks = [];
+    let maxTasks = [];
+    let i = 0;
+    function run() {
+        if (i === array.length) {
+            return Promise.resolve();
+        }
+        let task = Promise.resolve().then(() => callback(array[i++]));
+        allTasks.push(task);
+        let executing = task.then(() => maxTasks.splice(maxTasks.indexOf(executing), 1))
+        maxTasks.push(executing);
+
+        let r = Promise.resolve();
+        if (maxTasks.length >= max) {
+            r = Promise.race(maxTasks);
+        }
+        return t.then(() => run());
+    }
+    return run().then(() => Promise.all(allTasks))
+}
+
 // const timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
 // limit(2, [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout).then((res) => {
 //   console.log(res)
@@ -259,40 +281,33 @@ function ajax(url, method) {
 }
 
 // 17. events模块
-class Events {
+class EventEmitter {
     constructor() {
-        this.events = new Map();
+        this.events = {};
     }
-    on(type, handler, once) {
-        let eventsOfType = this.events.get(type);
-        if (!eventsOfType) {
-            this.events.set(event, [])
+    on(type, cb) {
+        if (!this.events[type]) {
+            this.events[type] = []
         }
-        if (!eventsOfType.includes(handler)) {
-            this.events.set(event, eventsOfType.push(handler));
-            if (once) {
-                handler.once = true;
-            }
+        this.events[type].push(cb)
+    }
+    emit(type, params = {}) {
+        if (this.events[type]) {
+            this.events[type].forEach(fn => fn(...params))
         }
     }
-    off(type, handler) {
-        let eventsOfType = this.events.get(type);
-        if (!hanlder) {
-            eventsOfType = [];
-            return false;
+    off(type, cb) {
+        if (this.events[type]) {
+            this.events[type].fliter(item => item !== cb);
         }
-        eventsOfType.filter(fn => handler !== fn)
     }
-    emit(type, eventData = {}) {
-        this.events.get(type).forEach(fn => {
-            fn.call(null, eventData);
-            if (fn.once) {
-                this.off(type, fn)
-            }
-        });
-    }
-    once(event) {
-        let flag = true;
+    once(type, cb) {
+        const self = this;
+        function one() {
+            cb.call(self, arguments);
+            self.off(type, one)
+        }
+        this.on(type, one)
     }
 }
 
@@ -322,21 +337,7 @@ setTimeout(() => {
     myClearInterval(a);
 }, 4000);
 
-// 19. 懒加载 && vue的lazy-load的实现
-function lazyload() {
-    const imgs = document.getElementByTagName('img');
-    const len = imgs.length;
-    // 视口的高度
-    const viewHeight = document.documentElement.clientHeight;
-    // 滚动条到顶部的高度
-    const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
-    for (let i = 0; i < len; i++) {
-        const offsetHeight = imgs[i].offsetTop;
-
-    }
-}
-
-// 20. 渲染几万条数据页面不卡顿， 使用requestAnimationFrame
+// 19. 渲染几万条数据页面不卡顿， 使用requestAnimationFrame
 setTimeout(() => {
     const total = 100000;
     // 一次插入的数据
@@ -365,7 +366,7 @@ setTimeout(() => {
     loop();
 }, 0);
 
-// 21. koa中间件 compose原理
+// 20. koa中间件 compose原理
 function compose(middleware) {
     // 检验middleware为array，校验每个中间件函数必须为函数
     return function(ctx, next) {
@@ -383,7 +384,8 @@ function compose(middleware) {
             try {
                 const nextt = dispatch.bind(null, i + 1);
                 const fnResult = fn(context, next);
-                return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
+                return Promise.resolve(fnResult);
+                // return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
             } catch (err) {
                 return Promise.reject(err)
             }

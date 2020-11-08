@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+    <h2 class="images">0</h2>
+    <input type="text" value="0" id="txt_end"/>
+    -
+    <input type="text" value="500" id="txt_start" />
+    <input type="button" value="setNum" onclick="setNum(500);"/>
+    <script>
+        var countToNumber = function (element, number, suffix, duration) {
+            console.log('-----element-----', element);
+            $({count: parseInt(element.text().split("+")[0].replace(/\,/g, ''))})
+                .animate(
+                    {count: number}, 
+                    {
+                        duration: duration ? duration : 1000,
+                        easing: 'swing', 
+                        step: function (now) {
+                            element.text((Math.floor(now) + suffix).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                        },
+                        complete: function () {
+                            countingFromZero = false;
+                        }
+                    }
+                );
+            }
+        // countToNumber($('.images'), 500, '', 200);
+
+        function setNum(){
+            countToNumber($('.images'), $("#txt_start").val(), '', $("#txt_end").val());
+        }
+    </script>
+</body>
+</html>
