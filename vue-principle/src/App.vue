@@ -2,11 +2,12 @@
  * @Description: 
  * @Author: zhaocheng.zhai
  * @Date: 2020-04-20 18:47:41
- * @LastEditTime: 2020-10-27 13:17:10
+ * @LastEditTime: 2020-11-14 13:55:29
  * @LastEditors: zhaocheng.zhai
 --> 
 <template>
   <div id="app">
+    <sparrow />
     <!-- <MonacoEditor
       width="800"
       height="500"
@@ -15,7 +16,7 @@
       :options="options"
       @change="onChange"
     ></MonacoEditor> -->
-    <Monaco></Monaco>
+    <!-- <Monaco></Monaco> -->
     <!-- <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld :msg="msg"/>
     <div class="msg" ref="msg">{{msg}}</div>
@@ -28,7 +29,8 @@
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue';
-import Monaco from './components/monaco';
+// import Monaco from './components/monaco';
+import Sparrow from '@sparrow-vue/develop-ui';
 // import MonacoEditor from 'monaco-editor-vue';
 
 export default {
@@ -36,7 +38,8 @@ export default {
   components: {
     // HelloWorld,
     // MonacoEditor,
-    Monaco,
+    // Monaco,
+    Sparrow,
   },
   data: () => ({
     options: {},

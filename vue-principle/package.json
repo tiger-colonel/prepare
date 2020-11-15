@@ -5,9 +5,11 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "sparrow": "sparrow start -m page"
   },
   "dependencies": {
+    "@sparrow-vue/develop-ui": "^0.1.5",
     "core-js": "^3.6.4",
     "element-ui": "^2.13.1",
     "monaco-editor": "^0.21.2",
@@ -21,6 +23,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "sparrow-code": "^0.6.2",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {

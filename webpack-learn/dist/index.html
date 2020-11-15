@@ -1,1 +1,38 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Document</title><link href="css/main.c6c730f8.css" rel="stylesheet"></head><body><h1>Hello World</h1><h3>Hello World</h3><img src="img1/63c8499265.png" alt=""><script src="bundle.73472697.js"></script></body></html>
+<!--
+ * @Description: 
+ * @Author: zhaocheng.zhai
+ * @Date: 2020-11-14 23:27:57
+ * @LastEditTime: 2020-11-15 00:21:36
+ * @LastEditors: zhaocheng.zhai
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="test">1</div>
+    <script src="./bundle.js"></script>
+    <script>
+        const dom = document.querySelector('#test');
+        dom.innerHTML = 2;
+        console.log('-----2-----', 2);
+        setTimeout(() => {
+            dom.innerHTML = 3;
+            console.log('-----3-----', 3);
+        }, 1000);
+        setTimeout(() => {
+            dom.innerHTML = 5;
+            console.log('-----5-----', 5);
+        }, 2000);
+        Promise.resolve().then(() => {
+            while (true) {
+                dom.innerHTML = 4;
+                console.log('-----4-----', 4);
+            }
+        });
+    </script>
+</body>
+</html>

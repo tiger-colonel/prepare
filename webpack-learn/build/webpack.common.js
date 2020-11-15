@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-let path = require('path');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let {srcPath} = require('./paths')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {srcPath} = require('./paths')
 
 module.exports = {
     // 入口

@@ -23,7 +23,7 @@ let depth = 0;
 fs.readFile(controllersPath, 'utf8', (err, res) => {
     let code = parse(res);
     traverse(code, {
-        ExpressionStatement(path) {
+        ExpressionStatement(path) {rm -
             let operateStatement = path;
             operateStatement.traverse({
                 MemberExpression(path) {
