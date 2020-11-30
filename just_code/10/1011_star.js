@@ -21,6 +21,17 @@ Array.prototype.myReduce = function(callback, initialValue) {
     return accumulator;
 }
 
+function reduce(cb, initialValue) {
+    const ctx = this;
+    const len = ctx.length;
+    let i = 0;
+    let sum = initialValue || ctx[0];
+    while (i < len) {
+        sum = cb.call(null, sum, ctx[i++], i, ctx);
+    }
+    return sum;
+}
+
 
 // 4. call
 Function.prototype.myCall = function(context = window, args) {
@@ -90,18 +101,6 @@ function throttle(fn, wait) {
         flag = false;
         setTimeout(() => {
             fn.apply(this, ...arguments);
-            flag = true;
-        }, wait);
-    }
-}
-
-function throttle(fn, wait) {
-    let flag = true;
-    return function () {
-        if (!flag) return;
-        flag = false;
-        setTimeout(() => {
-            fn.call(this, ...arguments);
             flag = true;
         }, wait);
     }
@@ -382,7 +381,7 @@ function compose(middleware) {
             if (i === middleware.length) fn = next;
             if (!fn) return Promise.resolve();
             try {
-                const nextt = dispatch.bind(null, i + 1);
+                const next = dispatch.bind(null, i + 1);
                 const fnResult = fn(context, next);
                 return Promise.resolve(fnResult);
                 // return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
@@ -391,6 +390,30 @@ function compose(middleware) {
             }
         }
     }
+}
+
+function compose(middlewares) {
+    return function(ctx, next) {
+        let index = -1;
+        function dispatch(i) {
+            if (i <= index) {
+                throw new Error('重复执行')
+            }
+            index = i
+            let fn = middlewares[i];
+            if (i === middlewares.length) fn = next;
+            if (!fn) return Promise.resolve()
+            try {
+                const next = dispatch.call(null, i + 1)
+                const fnResult = fn(context, next);
+                return Promise.resolve(fnResult)
+            } catch (err) {
+                return Promise.reject(err)
+            }
+        }
+        return dispatch(0);
+    }
+    
 }
 
 

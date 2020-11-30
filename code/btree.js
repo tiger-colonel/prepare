@@ -81,7 +81,6 @@ class SearchTree {
         }
     }
 }
-op-
 
 let root = new SearchTree([5,1,4,null,null,3,6]);
 let res = SearchTree.walk(root)
