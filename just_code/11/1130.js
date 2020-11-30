@@ -59,7 +59,14 @@ function parseParam(url) {
         if (~item.indexOf('=')) {
             let [key, value] = item.split('=');
             value = decodeURIComponent(value);
-            if 
+            if (paramsObj.hasOwnProperty(key)) {
+                paramsObj[key] = [].concat(paramsObj[key], value);
+            } else {
+                paramsObj[key] = value;
+            }
+        } else {
+            paramsObj[item] = true;
         }
-    })
+    });
+    return paramsObj;
 }
