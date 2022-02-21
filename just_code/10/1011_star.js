@@ -21,17 +21,6 @@ Array.prototype.myReduce = function(callback, initialValue) {
     return accumulator;
 }
 
-function reduce(cb, initialValue) {
-    const ctx = this;
-    const len = ctx.length;
-    let i = 0;
-    let sum = initialValue || ctx[0];
-    while (i < len) {
-        sum = cb.call(null, sum, ctx[i++], i, ctx);
-    }
-    return sum;
-}
-
 
 // 4. call
 Function.prototype.myCall = function(context = window, args) {
@@ -155,7 +144,7 @@ function extend(parent, child) {
 
 // Object.create()
 function create(proto) {
-    function F() {};
+    function F() {}
     F.prototype = proto;
     return new F();
 }
@@ -193,58 +182,71 @@ target.target = target;
 // console.log('-----deepclone-----', deepclone(target));
 
 // 14. promise 并行限制
-function limit(max, array, callback) {
-    let allTasks = [];
-    let maxTasks = [];
-    let i = 0;
-    let promise = Promise.resolve();
-    let run = () => {
-        if (i === array.length) {
-            return promise;
-        }
+// function limit(max, array, callback) {
+//     let allTasks = [];
+//     let maxTasks = [];
+//     let i = 0;
+//     let promise = Promise.resolve();
+//     let run = () => {
+//         if (i === array.length) {
+//             return promise;
+//         }
 
-        const task = promise.then(() => callback(array[i++]));
-        allTasks.push(task);
-        console.log('-----allTasks-----', allTasks);
+//         const task = promise.then(() => callback(array[i++]));
+//         allTasks.push(task);
+//         console.log('-----allTasks-----', allTasks);
 
-        let executing = task.then(() => maxTasks.splice(maxTasks.indexOf(executing), 1));
-        maxTasks.push(executing);
+//         let executing = task.then(() => maxTasks.splice(maxTasks.indexOf(executing), 1));
+//         maxTasks.push(executing);
         
-        let r = promise;
-        if (maxTasks.length >= max) {
-            r = Promise.race(maxTasks)
-        }
-        return r.then(() => run());
-    }
-    return run().then(() => Promise.all(allTasks))
+//         let r = promise;
+//         if (maxTasks.length >= max) {
+//             r = Promise.race(maxTasks)
+//         }
+//         return r.then(() => run());
+//     }
+//     return run().then(() => Promise.all(allTasks))
+// }
+
+function limit(count, array, callback) {
+  const tasks = [];
+  const executing = [];
+  let i = 0;
+  let promise = Promise.resolve();
+  const enqueue = () => {
+      // 1. 边界条件，array为空，或者promise全都达到resolve状态
+      if (i === array.length) {
+          return promise;
+      }
+      // 2. 生成一个promise实例，并在then方法中的onFulfilled函数里返回实际要执行的promise
+      const task = promise.then(() => callback(array[i++], array));
+      tasks.push(task);
+      console.log('-----tasks-----', tasks);
+      // 4. 将执行完毕的promise移除
+      const doing = task.then(() => executing.splice(executing.indexOf(doing), 1));
+      // 3. 将正在执行的promise插入executing数组
+      executing.push(doing);
+      console.log('----------', executing);
+      // 如果正在执行的promise达到了limit，使用Promise.race让已经执行好的promise先出去，新的promise再进来
+      let res = promise;
+      if (executing.length >= count) {
+          res = Promise.race(executing)
+      }
+      // 5. 递归执行enqueue，直至满足1
+      return res.then(() => enqueue());
+  }
+  return enqueue().then(() => Promise.all(tasks))
 }
 
-function limit(max, array, callback) {
-    let allTasks = [];
-    let maxTasks = [];
-    let i = 0;
-    function run() {
-        if (i === array.length) {
-            return Promise.resolve();
-        }
-        let task = Promise.resolve().then(() => callback(array[i++]));
-        allTasks.push(task);
-        let executing = task.then(() => maxTasks.splice(maxTasks.indexOf(executing), 1))
-        maxTasks.push(executing);
-
-        let r = Promise.resolve();
-        if (maxTasks.length >= max) {
-            r = Promise.race(maxTasks);
-        }
-        return t.then(() => run());
-    }
-    return run().then(() => Promise.all(allTasks))
-}
-
-// const timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
-// limit(2, [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout).then((res) => {
-//   console.log(res)
-// })
+// test
+const timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i))
+limit(2, [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout).then((res) => {
+console.log(res)
+})
+let allpromises = [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000].map(item => timeout(item))
+Promise.all(allpromises).then(res1 => {
+  console.log('-----res1-----', res1);
+})
 
 // 15. jsonp
 const jsonp = ({url, params, callbackName}) => {
@@ -253,7 +255,7 @@ const jsonp = ({url, params, callbackName}) => {
         url = Object.keys(params).reduce((t, v) => (t += `${v}=${params[v]}&`, t), '');
         return url.substr(0, url.length - 1);
     }
-    return new Promise((ersolve, reject) => {
+    return new Promise((resolve, reject) => {
         const scriptEle = document.createElement('script');
         scriptEle.src = generateUrl();
         document.body.appendChild(scriptEle);
@@ -392,28 +394,28 @@ function compose(middleware) {
     }
 }
 
-function compose(middlewares) {
-    return function(ctx, next) {
-        let index = -1;
-        function dispatch(i) {
-            if (i <= index) {
-                throw new Error('重复执行')
-            }
-            index = i
-            let fn = middlewares[i];
-            if (i === middlewares.length) fn = next;
-            if (!fn) return Promise.resolve()
-            try {
-                const next = dispatch.call(null, i + 1)
-                const fnResult = fn(context, next);
-                return Promise.resolve(fnResult)
-            } catch (err) {
-                return Promise.reject(err)
-            }
-        }
-        return dispatch(0);
-    }
+// function compose(middlewares) {
+//     return function(ctx, next) {
+//         let index = -1;
+//         function dispatch(i) {
+//             if (i <= index) {
+//                 throw new Error('重复执行')
+//             }
+//             index = i
+//             let fn = middlewares[i];
+//             if (i === middlewares.length) fn = next;
+//             if (!fn) return Promise.resolve()
+//             try {
+//                 const next = dispatch.call(null, i + 1)
+//                 const fnResult = fn(context, next);
+//                 return Promise.resolve(fnResult)
+//             } catch (err) {
+//                 return Promise.reject(err)
+//             }
+//         }
+//         return dispatch(0);
+//     }
     
-}
+// }
 
 

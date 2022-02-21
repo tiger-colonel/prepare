@@ -4,7 +4,7 @@ export default class MyCircularQueue {
         this.front = 0;
         this.rear = 0;
         this.max = k;
-    },
+    }
     enQueue(num) {
         if (this.isFull) {
             return false;
@@ -13,22 +13,22 @@ export default class MyCircularQueue {
             this.rear = (this.rear + 1) % this.max;
             return true;
         }
-    },
+    }
     deQueue() {
         let v = this.list[this.front];
         this.list[this.front] = '';
         this.front = (this.front) % this.max;
         return v;
-    },
+    }
     isEmpty() {
         return this.front === this.rear && !this.list[this.front];
-    },
+    }
     isFull() {
-        return this.fron t = this.rear && !!this.list[this.front];
-    },
+        return this.front = this.rear && !!this.list[this.front];
+    }
     Front() {
         return this.list[this.front]
-    },
+    }
     Rear() {
         let rear = this.rear - 1;
         return this.list[rear < 0 ? this.max - 1 : rear]
